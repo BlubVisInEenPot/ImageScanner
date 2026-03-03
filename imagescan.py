@@ -2,8 +2,17 @@ import os
 from  datetime import *
 
 # ik was bij de 7de page van pdf
+###
+###
+imageList = []
+DirPath = "Y:\Digibende\Amstelveen\Kandidaten\Programmeren\morten"
+found_pictures = 0
 
-def isImage(naam):
+def sortFunc(e):
+    return e["name"]
+
+
+def isImage(naam): # return a True if passed extension name is in the list
     imageExt = [".jpg", ".png", ".jpeg", ".tiff", ".raw", ".dng", ".gif", ]
     for ext in imageExt:
         if ext in naam:
@@ -11,21 +20,23 @@ def isImage(naam):
     return False
 
 def scanFolders(startFolder):
-    global found_pictures
+    global found_pictures, imageList
+    bestandData = {}
 
-    # print("Inhoud van" + startFolder)
     list = os.scandir(startFolder)
 
     for entry in list:
 
         if entry.is_dir():
-            # print('[' + entry.name + ']')
             scanFolders(os.path.join(startFolder, entry.name))
 
         elif entry.is_file():
             if isImage(entry.name):
-                d = datetime.fromtimestamp(entry.stat().st_birthtime)
 
+                d = datetime.fromtimestamp(entry.stat().st_birthtime)
+                bestandData = { "name": entry.name, "path": entry.path, "size": entry.stat().st_size, "created": entry.stat().st_birthtime }
+                imageList.append(bestandData)
+                print(imageList)
                 print(entry.name)
                 print(d.strftime('%d-%m-%Y'))  # 16 feb 2026
                 print("_________________________________")
@@ -33,16 +44,10 @@ def scanFolders(startFolder):
 
     list.close()
 
-found_pictures = 0
 
-scanFolders('Y:\Digibende\Amstelveen\Kandidaten\Programmeren\morten')
+scanFolders(DirPath)
 print("aantal gevonden fotos: " + str(found_pictures))
-
-
-list = os.scandir('Y:\Digibende\Amstelveen\Kandidaten\Programmeren\morten')
-
-
-
+imageList.sort(key=sortFunc)
 
 
 
