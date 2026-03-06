@@ -8,8 +8,9 @@ imageList = []
 DirPath = "Y:\Digibende\Amstelveen\Kandidaten\Programmeren\morten"
 found_pictures = 0
 
-def sortFunc(e):
-    return e["name"]
+def sortFunc(dictionary):
+    return "{:10d}".format(dictionary["size"]) + dictionary["name"].upper()  # RETURN de naam van de gegeven dictionery
+
 
 
 def isImage(naam): # return a True if passed extension name is in the list
@@ -36,18 +37,20 @@ def scanFolders(startFolder):
                 d = datetime.fromtimestamp(entry.stat().st_birthtime)
                 bestandData = { "name": entry.name, "path": entry.path, "size": entry.stat().st_size, "created": entry.stat().st_birthtime }
                 imageList.append(bestandData)
-                print(imageList)
-                print(entry.name)
-                print(d.strftime('%d-%m-%Y'))  # 16 feb 2026
-                print("_________________________________")
+                # print(imageList)
+                # print(entry.name)
+                # print(d.strftime('%d-%m-%Y'))  # 16 feb 2026
+                # print("_________________________________")
                 found_pictures += 1
 
     list.close()
 
+scanFolders(DirPath) # roep functie aan
+print("aantal gevonden fotos: " + str(found_pictures)) # print hoe veel fotos er zijn gevenden
+imageList.sort(key=sortFunc) # soorteer de image list
 
-scanFolders(DirPath)
-print("aantal gevonden fotos: " + str(found_pictures))
-imageList.sort(key=sortFunc)
+for i in imageList:# loop door de image list heen
+    print(i["name"] + " - " + i["path"] + "  (" + str(i["size"]) + ")")# print de naam van de dictionery waar de loop is
 
 
 
