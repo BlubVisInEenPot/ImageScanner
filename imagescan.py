@@ -1,17 +1,44 @@
 import os
 from  datetime import *
 
-# ik was bij de 7de page van pdf
-###
-###
+
 imageList = []
-DirPath = "Y:\Digibende\Amstelveen\Kandidaten\Programmeren\morten"
+DirPath = ""
+sortedPath = ""
 found_pictures = 0
+
+def choosePath():
+    global DirPath
+
+    while True:
+        chosenPath = input("path to search (blank = default): ")
+
+        if chosenPath == "":
+            DirPath = "Y:\Digibende\Amstelveen\Kandidaten\Programmeren\morten"
+            break
+        elif os.path.exists(chosenPath):
+            DirPath = chosenPath
+            break
+        else:
+            print("path does not exist")
+
+def chooseSortedPath():
+    global sortedPath
+
+    while True:
+        chosenPath = input("path to store sorted folders (blank = default): ")
+
+        if chosenPath == "":
+            sortedPath = "Y:\Digibende\Amstelveen\Kandidaten\Programmeren\morten\sorted photos"
+            break
+        elif os.path.exists(chosenPath):
+            sortedPath = chosenPath
+            break
+        else:
+            print("path does not exist")
 
 def sortFunc(dictionary):
     return "{:10d}".format(dictionary["size"]) + dictionary["name"].upper()  # RETURN de naam van de gegeven dictionery
-
-
 
 def isImage(naam): # return a True if passed extension name is in the list
     imageExt = [".jpg", ".png", ".jpeg", ".tiff", ".raw", ".dng", ".gif", ]
@@ -19,6 +46,7 @@ def isImage(naam): # return a True if passed extension name is in the list
         if ext in naam:
             return True
     return False
+
 
 def scanFolders(startFolder):
     global found_pictures, imageList
@@ -44,6 +72,10 @@ def scanFolders(startFolder):
                 found_pictures += 1
 
     list.close()
+
+
+choosePath()
+
 
 scanFolders(DirPath) # roep functie aan
 print("aantal gevonden fotos: " + str(found_pictures)) # print hoe veel fotos er zijn gevenden
