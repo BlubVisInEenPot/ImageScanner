@@ -7,6 +7,28 @@ DirPath = ""
 sortedPath = ""
 found_pictures = 0
 
+def copieTo_folders(dict_num):
+    global imageList , sortedPath
+    year = imageList[dict_num]["created"]
+
+    imageList[dict_num]["copieTo"] = sortedPath + "\\" + year
+    # geef mee dictionery nummer voeg de file location toe waar die moet staan
+
+
+def delete_dubbels():
+    global imageList
+    if len(imageList) > 0:
+        test = imageList[0]
+    else:
+        print("empty list")
+    huidige = 1
+    while huidige < len(imageList):
+        if imageList[huidige]["name"] == test["name"] and imageList[huidige]["size"] == test["size"]:
+            imageList.pop(huidige)
+        else:
+            test = imageList[huidige]
+            huidige += 1
+
 def choosePath():
     global DirPath
 
@@ -76,6 +98,7 @@ def scanFolders(startFolder): #
 #_______________________________________________________________________________________________________________________________________________
 
 choosePath()
+chooseSortedPath()
 
 scanFolders(DirPath) # roep functie aan
 print("aantal gevonden fotos: " + str(found_pictures)) # print hoe veel fotos er zijn gevenden
@@ -84,51 +107,11 @@ imageList.sort(key=sortFunc) # soorteer de image list
 for i in imageList:# loop door de image list heen
     print(i["name"] + " - " + i["path"] + "  (" + str(i["size"]) + ")")# print de naam van de dictionery waar de loop is
 
+print("_____________________")
+print(imageList)
+delete_dubbels()
+print("_____________________")
+
 print(imageList)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# def calc_spaces(string,length):
-#     a = len(string)
-#     b = length - a
-#     return " " * b
-#
-# print("SIZE                       NAME                         TYPE"                    "DATE")
-# print("______________________________________________________________________________________________")
-#
-# for entry in list :
-#     if entry.is_dir() or entry.is_file():
-#         print("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -")
-#
-#         if entry.is_dir():
-#             FileType = "Folder"
-#         elif entry.is_file():
-#             FileType = "File"
-#
-#         print(str(entry.stat().st_size)[:15] + " bytes" + calc_spaces(str(entry.stat().st_size)[:15], 20) + str(entry.name)[:15] \
-#               + calc_spaces(str(entry.name)[:15], 30) + FileType)
-#         # print(entry.stat())
-#         # print(type(entry.stat()))
-#
-# list.close() # Sluiten is netjes om systeem resources te laten vrijmaken
-#
-#
-# print(type(entry.stat()))
-#
-#
-# #print(entry.stat().st_ctime)
+copieTo_folders(2)
