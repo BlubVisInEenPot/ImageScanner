@@ -6,7 +6,7 @@ imageList = []
 DirPath = ""
 sortedPath = ""
 found_pictures = 0
-
+#
 def copieTo_folders(dict_num):
     global imageList , sortedPath
     year = imageList[dict_num]["created"]
