@@ -9,9 +9,9 @@ found_pictures = 0
 #
 def copieTo_folders(dict_num):
     global imageList , sortedPath
-    year = imageList[dict_num]["created"]
-
-    imageList[dict_num]["copieTo"] = sortedPath + "\\" + year
+    year = imageList[dict_num]["created"].strftime('%Y')
+    print(year)
+    # imageList[dict_num]["copieTo"] = sortedPath + "\\" + year
     # geef mee dictionery nummer voeg de file location toe waar die moet staan
 
 
@@ -107,11 +107,11 @@ imageList.sort(key=sortFunc) # soorteer de image list
 for i in imageList:# loop door de image list heen
     print(i["name"] + " - " + i["path"] + "  (" + str(i["size"]) + ")")# print de naam van de dictionery waar de loop is
 
-print("_____________________")
-print(imageList)
+# print("_____________________")
+# print(imageList)
 delete_dubbels()
-print("_____________________")
+# print("_____________________")
 
-print(imageList)
+# print(imageList)
 
 copieTo_folders(2)
