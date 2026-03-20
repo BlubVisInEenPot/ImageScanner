@@ -6,12 +6,12 @@ imageList = []
 DirPath = ""
 sortedPath = ""
 found_pictures = 0
-#
-def copieTo_folders(dict_num):
-    global imageList , sortedPath
-    year = imageList[dict_num]["created"]
 
-    imageList[dict_num]["copieTo"] = sortedPath + "\\" + year
+def add_sortedFolderPath(dict_num):
+    global imageList , sortedPath
+    year = datetime.utcfromtimestamp(imageList[dict_num]["created"])
+    print(year.strftime('%Y'))
+    imageList[dict_num]["copieTo"] = sortedPath + "\\" + year.strftime('%Y')
     # geef mee dictionery nummer voeg de file location toe waar die moet staan
 
 
@@ -112,6 +112,7 @@ print(imageList)
 delete_dubbels()
 print("_____________________")
 
-print(imageList)
+add_sortedFolderPath(2)
 
-copieTo_folders(2)
+print(imageList)
+# copieTo_folders(2)
