@@ -1,4 +1,5 @@
 import os
+import shutil
 from  datetime import *
 
 
@@ -7,12 +8,22 @@ DirPath = ""
 sortedPath = ""
 found_pictures = 0
 
-def add_sortedFolderPath(dict_num):
+def makedir(dir):
+
+    os.makedirs(dir)
+
+def add_sortedFolderPath():
     global imageList , sortedPath
-    year = datetime.utcfromtimestamp(imageList[dict_num]["created"])
-    print(year.strftime('%Y'))
-    imageList[dict_num]["copieTo"] = sortedPath + "\\" + year.strftime('%Y')
-    # geef mee dictionery nummer voeg de file location toe waar die moet staan
+    for file in range(0, len(imageList)):
+        date = datetime.utcfromtimestamp(imageList[file]["created"])
+        imageList[file]["destFolder"] = os.path.join(sortedPath, date.strftime('%Y'), date.strftime('%B'))
+
+def copieTo_folders():
+    global imageList
+
+    for dict in imageList:
+        makedir(dict["destFolder"])
+        shutil.copy2(dict["path"], dict["destFolder"])
 
 
 def delete_dubbels():
@@ -107,12 +118,15 @@ imageList.sort(key=sortFunc) # soorteer de image list
 for i in imageList:# loop door de image list heen
     print(i["name"] + " - " + i["path"] + "  (" + str(i["size"]) + ")")# print de naam van de dictionery waar de loop is
 
-print("_____________________")
-print(imageList)
+# print("_____________________")
+# print(imageList)
 delete_dubbels()
-print("_____________________")
+# print("_____________________")
 
-add_sortedFolderPath(2)
 
+# print(imageList)
+
+add_sortedFolderPath()
 print(imageList)
 # copieTo_folders(2)
+copieTo_folders()
