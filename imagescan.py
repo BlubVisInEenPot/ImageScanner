@@ -8,17 +8,24 @@ DirPath = ""
 sortedPath = ""
 found_pictures = 0
 
-def makedir(dir):
+def makedir(i): # make the directories
+    try:
+        os.makedirs(i)
+    except FileExistsError:
+        print("file already exists")
+    except PermissionError:
+        print("permision denied")
+    except Exception as e:
+        print(f"An error occurred: {e}")
+    #os.path.exists(i):
 
-    os.makedirs(dir)
-
-def add_sortedFolderPath():
+def add_sortedFolderPath(): # add the sorted folder locations to the dictionarys
     global imageList , sortedPath
     for file in range(0, len(imageList)):
         date = datetime.utcfromtimestamp(imageList[file]["created"])
         imageList[file]["destFolder"] = os.path.join(sortedPath, date.strftime('%Y'), date.strftime('%B'))
 
-def copieTo_folders():
+def copieTo_folders(): # copie all photos to the sorted folder locations
     global imageList
 
     for dict in imageList:
@@ -67,8 +74,24 @@ def chooseSortedPath():
         elif os.path.exists(chosenPath):
             sortedPath = chosenPath
             break
-        else:
+        elif not os.path.exists(chosenPath):
             print("path does not exist")
+            correctInput = False
+            while correctInput == False:
+                i = input("do you want to make it y/n: ")
+                print("__" + str(i) + "__")
+                if i == "y":
+                    correctInput = True
+                    makedir(chosenPath)
+                    sortedPath = chosenPath
+                    break # needs to break out of both loops
+                elif i == "n":
+                    correctInput = True
+                elif i != "y" or i != "n":
+                    print("type y for yes or n for no")
+
+        else:
+            print("error")
 #  ^ vraagt voor een pat waar die de gesoorteerde mapjes met fotos neer zet
 def sortFunc(dictionary):
     return "{:10d}".format(dictionary["size"]) + dictionary["name"].upper()  # RETURN de naam van de gegeven dictionery
@@ -103,7 +126,7 @@ def scanFolders(startFolder): #
                 # print(d.strftime('%d-%m-%Y'))  # 16 feb 2026
                 # print("_________________________________")
                 found_pictures += 1 # voeg 1 toe aan de gevonden pictures
-
+    add_sortedFolderPath()
     list.close()
 
 #_______________________________________________________________________________________________________________________________________________
@@ -115,18 +138,12 @@ scanFolders(DirPath) # roep functie aan
 print("aantal gevonden fotos: " + str(found_pictures)) # print hoe veel fotos er zijn gevenden
 imageList.sort(key=sortFunc) # soorteer de image list
 
-for i in imageList:# loop door de image list heen
-    print(i["name"] + " - " + i["path"] + "  (" + str(i["size"]) + ")")# print de naam van de dictionery waar de loop is
+# for i in imageList:# loop door de image list heen
+#     print(i["name"] + " - " + i["path"] + "  (" + str(i["size"]) + ")")# print de naam van de dictionery waar de loop is
 
-# print("_____________________")
-# print(imageList)
+
 delete_dubbels()
-# print("_____________________")
-
-
-# print(imageList)
-
-add_sortedFolderPath()
-print(imageList)
-# copieTo_folders(2)
+# add_sortedFolderPath()##
 copieTo_folders()
+
+print(imageList)
