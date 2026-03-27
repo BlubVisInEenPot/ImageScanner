@@ -32,20 +32,27 @@ def copieTo_folders(): # copie all photos to the sorted folder locations
         shutil.copy2(dict["path"], dict["destFolder"])
 
 def delete_byteDubbels():
-    pass
+    # global imageList
+    # while True:
+    #     counter = 0
+    #     if counter > 0:
+    #         buffersize = 1048576
+    #         with open(imageList[counter - 1]["name"], "rb") as file1, open(imageList[counter]["name"], "rb") as file2:
 
+        #
+        # counter += 1
 def delete_dubbels():
     global imageList
-    if len(imageList) > 0:
-        test = imageList[0]
+    if len(imageList) > 0: # als de lengte van imageList groter is dan 0
+        vorige = imageList[0] # maak een variable aan vorige = het eerste ding in imageList
     else:
-        print("empty list")
-    huidige = 1
-    while huidige < len(imageList):
-        if imageList[huidige]["name"] == test["name"] and imageList[huidige]["size"] == test["size"]:
-            imageList.pop(huidige)
+        print("empty list") # print anders empty list
+    huidige = 1 # maak een variable aan huidig is 1
+    while huidige < len(imageList): # als huidig(1) klijner is dan de lengte van imagelist loop
+        if imageList[huidige]["name"] == vorige["name"] and imageList[huidige]["size"] == vorige["size"]: # als de naam van de huidige gelijk is als de naam van de vorige en de size
+            imageList.pop(huidige) #
         else:
-            test = imageList[huidige]
+            vorige = imageList[huidige]
             huidige += 1
 
 def choosePath():
@@ -134,7 +141,7 @@ def cli():
     allPictures = len(imageList)
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     while True:
-        userInput = input("delete dubbel images on (size and name)(1) or (byte by byte)(2): ")
+        userInput = input("delete dubbel images by (size and name)(1) or (byte by byte)(2): ")
         if userInput == "1":
             delete_dubbels()  # delete the pictures with the same name and size
             break
