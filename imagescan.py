@@ -6,13 +6,12 @@ from  datetime import *
 imageList = []
 DirPath = ""
 sortedPath = ""
-found_pictures = 0
 
 def makedir(i): # make the directories
     try:
         os.makedirs(i)
     except FileExistsError:
-        print("file already exists")
+        pass
     except PermissionError:
         print("permision denied")
     except Exception as e:
@@ -32,6 +31,8 @@ def copieTo_folders(): # copie all photos to the sorted folder locations
         makedir(dict["destFolder"])
         shutil.copy2(dict["path"], dict["destFolder"])
 
+def delete_byteDubbels():
+    pass
 
 def delete_dubbels():
     global imageList
@@ -64,8 +65,9 @@ def choosePath():
 #  ^ vraagt voor een pat die die in DirPath zet
 def chooseSortedPath():
     global sortedPath
+    looping = True
 
-    while True:
+    while looping:
         chosenPath = input("path to store sorted folders (blank = default): ")
 
         if chosenPath == "":
@@ -79,12 +81,11 @@ def chooseSortedPath():
             correctInput = False
             while correctInput == False:
                 i = input("do you want to make it y/n: ")
-                print("__" + str(i) + "__")
                 if i == "y":
                     correctInput = True
                     makedir(chosenPath)
                     sortedPath = chosenPath
-                    break # needs to break out of both loops
+                    looping = False # needs to break out of both loops
                 elif i == "n":
                     correctInput = True
                 elif i != "y" or i != "n":
@@ -105,7 +106,7 @@ def isImage(naam): # return a True if passed extension name is in the list
 # ^ checkt met doorgegeven naam of een file een foto is
 
 def scanFolders(startFolder): #
-    global found_pictures, imageList
+    global imageList
     bestandData = {} # maak lege dict aan
 
     list = os.scandir(startFolder) # list = start directory
@@ -118,32 +119,33 @@ def scanFolders(startFolder): #
         elif entry.is_file(): # als de entry een file is
             if isImage(entry.name): # check of entry een imige is met de functie isImage()
 
-                d = datetime.fromtimestamp(entry.stat().st_birthtime) # d = de datum ven de entry (de foto dus)
                 bestandData = { "name": entry.name, "path": entry.path, "size": entry.stat().st_size, "created": entry.stat().st_birthtime } # bestandData = een dict met naam,pat,size,dateCreated er in
                 imageList.append(bestandData) # voeg die dict toe aan de imageList nu is de imagelist een lijst met info over de fotos
-                # print(imageList)
-                # print(entry.name)
-                # print(d.strftime('%d-%m-%Y'))  # 16 feb 2026
-                # print("_________________________________")
-                found_pictures += 1 # voeg 1 toe aan de gevonden pictures
+
     add_sortedFolderPath()
     list.close()
 
+def cli():
+    choosePath()
+    chooseSortedPath()
+#- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    scanFolders(DirPath)  # roep functie aan
+    imageList.sort(key=sortFunc)  # soorteer de image list
+    allPictures = len(imageList)
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    while True:
+        userInput = input("delete dubbel images on (size and name)(1) or (byte by byte)(2): ")
+        if userInput == "1":
+            delete_dubbels()  # delete the pictures with the same name and size
+            break
+        elif userInput == "2":
+            delete_byteDubbels()
+            break
+        else:
+            print("choose an option by typing the corresponding number. eg 2")
+# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+    copieTo_folders()  # copie the fount pictures to thare sorted folder path
+    print(str(allPictures) + " images found| " + str(allPictures - len(imageList)) + " images deleted| " + str(len(imageList)) + " images sorted|")
 #_______________________________________________________________________________________________________________________________________________
 
-choosePath()
-chooseSortedPath()
-
-scanFolders(DirPath) # roep functie aan
-print("aantal gevonden fotos: " + str(found_pictures)) # print hoe veel fotos er zijn gevenden
-imageList.sort(key=sortFunc) # soorteer de image list
-
-# for i in imageList:# loop door de image list heen
-#     print(i["name"] + " - " + i["path"] + "  (" + str(i["size"]) + ")")# print de naam van de dictionery waar de loop is
-
-
-delete_dubbels()
-# add_sortedFolderPath()##
-copieTo_folders()
-
-print(imageList)
+cli()
