@@ -32,17 +32,34 @@ def copieTo_folders(): # copie all photos to the sorted folder locations
         shutil.copy2(dict["path"], dict["destFolder"])
 
 def delete_byteDubbels():
-    # global imageList
-    # while True:
-    #     counter = 0
-    #     if counter > 0:
-    #         buffersize = 1048576
-    #         with open(imageList[counter - 1]["name"], "rb") as file1, open(imageList[counter]["name"], "rb") as file2:
+    global imageList
 
-        #
-        # counter += 1
+    buffersize = 1048576
+    counter = 0
+
+    if len(imageList) > ####
+
+    while counter < len(imageList):
+        filePath1 = imageList[counter]["path"]
+        filePath2 = imageList[counter + 1]["path"]
+
+        with open(filePath1, "rb") as file1, open(filePath2, "rb") as file2:
+            while True:
+                bytes1 = file1.read(buffersize)
+                bytes2 = file2.read(buffersize)
+
+                if bytes1 != bytes2:
+                    counter += 1
+                    break
+
+                elif not bytes1:
+                    imageList.pop(counter)
+                    break
+
+
 def delete_dubbels():
     global imageList
+
     if len(imageList) > 0: # als de lengte van imageList groter is dan 0
         vorige = imageList[0] # maak een variable aan vorige = het eerste ding in imageList
     else:
