@@ -2,6 +2,10 @@ import os
 import shutil
 from  datetime import *
 
+# to do
+# 1: in bytedubbel en dubbel functie delete de gene die het niewste is
+# 2:
+
 
 imageList = []
 DirPath = ""
@@ -37,9 +41,11 @@ def delete_byteDubbels():
     buffersize = 1048576
     counter = 0
 
-    if len(imageList) > ####
+    if not len(imageList) > 0:
+        print("empty list")
 
-    while counter < len(imageList):
+    while counter + 1 < len(imageList):
+
         filePath1 = imageList[counter]["path"]
         filePath2 = imageList[counter + 1]["path"]
 
