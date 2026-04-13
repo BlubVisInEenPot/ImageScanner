@@ -1,5 +1,6 @@
 import os
 import shutil
+import tkinter as tk
 from  datetime import *
 
 # to do
@@ -49,19 +50,24 @@ def delete_byteDubbels():
         filePath1 = imageList[counter]["path"]
         filePath2 = imageList[counter + 1]["path"]
 
-        with open(filePath1, "rb") as file1, open(filePath2, "rb") as file2:
-            while True:
-                bytes1 = file1.read(buffersize)
-                bytes2 = file2.read(buffersize)
+        try:
+            print(f'byte comparing {filePath1}')
+            with open(filePath1, "rb") as file1:
+                print(f'and {filePath2}')
+                with open(filePath2, "rb") as file2:
+                    while True:
+                        bytes1 = file1.read(buffersize)
+                        bytes2 = file2.read(buffersize)
 
-                if bytes1 != bytes2:
-                    counter += 1
-                    break
+                        if bytes1 != bytes2:
+                            counter += 1
+                            break
 
-                elif not bytes1:
-                    imageList.pop(counter)
-                    break
-
+                        elif not bytes1:
+                            imageList.pop(counter)
+                            break
+        except  Exception as e:
+            print('File error: ', e)
 
 def delete_dubbels():
     global imageList
