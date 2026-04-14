@@ -1,11 +1,11 @@
 import os
 import shutil
-import tkinter as tk
+from tkinter import *
+from PIL import ImageTk, Image
 from  datetime import *
 
 # to do
-# 1: in bytedubbel en dubbel functie delete de gene die het niewste is
-# 2:
+# 1:
 
 
 imageList = []
@@ -182,6 +182,13 @@ def cli():
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     copieTo_folders()  # copie the fount pictures to thare sorted folder path
     print(str(allPictures) + " images found| " + str(allPictures - len(imageList)) + " images deleted| " + str(len(imageList)) + " images sorted|")
+
+def init_tk():
+    main = Tk()
+    main.title("test")
+    main.geometry("800x700")  # geeft breedte en hoogte van het window
+
 #_______________________________________________________________________________________________________________________________________________
 
-cli()
+init_tk()
+# cli()
