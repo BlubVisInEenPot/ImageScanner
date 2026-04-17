@@ -1,6 +1,6 @@
 import os
 import shutil
-from tkinter import *
+import tkinter as tk
 from PIL import ImageTk, Image
 from  datetime import *
 
@@ -182,11 +182,6 @@ def cli():
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     copieTo_folders()  # copie the fount pictures to thare sorted folder path
     print(str(allPictures) + " images found| " + str(allPictures - len(imageList)) + " images deleted| " + str(len(imageList)) + " images sorted|")
-
-def init_tk():
-    main = Tk()
-    main.title("test")
-    main.geometry("800x700")  # geeft breedte en hoogte van het window
 
 #_______________________________________________________________________________________________________________________________________________
 

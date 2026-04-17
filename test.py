@@ -1,39 +1,62 @@
-import tkinter as tk
+from tkinter import *
+from PIL import ImageTk, Image
 
-# from PIL import ImageTk, Image
+root = Tk()
 
+root.title("image sorter")
 
-root = tk.Tk()
-root.title("test app")
+root.geometry("550x300")
 
-
-def add_to_list(event=None):
-    text = entry.get()
-    if text:
-        text_list.insert(tk.END, text)
-        entry.delete(0, tk.END)
+root.resizable(width = True, height = True)
 
 
-root.columnconfigure(0, weight=1)
-root.rowconfigure(0, weight=1)
-
-frame = tk.Frame(root)
-frame.grid(row=0, column=0, sticky="nsew")
-
-frame.columnconfigure(0, weight=1)
-frame.rowconfigure(1, weight=1)
-
-entry = tk.Entry(frame, text="Add")  # vid 15:38
-entry.grid(row=0, column=0, sticky="ew")
-
-entry.bind("<Return>", add_to_list)
-
-entry_btn = tk.Button(frame, text="Add", command=add_to_list)
-entry_btn.grid(row=0, column=1)
-
-text_list = tk.Listbox(frame)
-text_list.grid(row=1, column=0, columnspan=2, sticky="nsew")
+btn = Button(root, text="test")
+btn.grid(row = 0, column = 0)
 
 root.mainloop()
+
+
+
+
+# import tkinter as tk
+#
+# # from PIL import ImageTk, Image
+#
+#
+# root = tk.Tk()
+# root.title("test app")
+#
+#
+# def add_to_list(event=None):
+#     text = entry.get()
+#     if text:
+#         text_list.insert(tk.END, text)
+#         entry.delete(0, tk.END)
+#
+#
+# root.columnconfigure(0, weight=1)
+# root.rowconfigure(0, weight=1)
+#
+# frame = tk.Frame(root)
+# frame.grid(row=0, column=0, sticky="nsew")
+#
+# frame.columnconfigure(0, weight=1)
+# frame.rowconfigure(1, weight=1)
+#
+# entry = tk.Entry(frame, text="Add")  # vid 15:38
+# entry.grid(row=0, column=0, sticky="ew")
+#
+# entry.bind("<Return>", add_to_list)
+#
+# entry_btn = tk.Button(frame, text="Add", command=add_to_list)
+# entry_btn.grid(row=0, column=1)
+#
+# label = tk.Label(frame, text="test", font=("Arial", 10))
+# label.grid(row=3, column=0)
+#
+# text_list = tk.Listbox(frame)
+# text_list.grid(row=1, column=0, columnspan=2, sticky="nsew")
+#
+# root.mainloop()
 
 # _______________________________________________________________________________________________________________________________________________
