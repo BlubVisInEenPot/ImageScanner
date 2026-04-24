@@ -1,73 +1,41 @@
 from tkinter import *
-from PIL import ImageTk, Image
-from tkinter import filedialog
+from tkinter import ttk
 
-root = Tk()
-root.title("image sorter")
+def add_item():
+    item = entry.get()
+    if item:
+        listbox.insert(END, item)
+        entry.delete(0, END)
+
+def remove_item():
+    selection = listbox.curselection()
+    if selection:
+        listbox.delete(selection)
+
+# Create main window
+
+# Configure main grid
 
 
-root.columnconfigure(0, weight=1)
-root.rowconfigure(0, weight=1)
+# Title label
 
-frame = Frame(root)
-frame.grid(row=0, column=0, sticky="nsew")
 
-frame.columnconfigure(0, weight=1)
-frame.rowconfigure(1, weight=1)
+# Main content frame
 
-entry = Entry(frame)
-entry.grid(row=0, column=0, sticky="ew")
+# Create Listbox with scrollbar
+listbox = Listbox(main_frame, font=('Arial', 10))
+listbox.grid(row=0, column=0, sticky="nsew")
 
-entry_btn = Button(frame, text="button")
-entry_btn.grid(row=0, column=1)
+# Vertical scrollbar
+scrollbar = ttk.Scrollbar(main_frame, orient="vertical", command=listbox.yview)
+scrollbar.grid(row=0, column=1, sticky="ns")
+listbox.configure(yscrollcommand=scrollbar.set)
 
-text_list = Listbox(frame)
-text_list.grid(row=1, column=0, columnspan=2, sticky="nsew")
+# Control frame
+
+
+# Entry and buttons
+
+# Add some initial items
 
 root.mainloop()
-
-
-
-
-# import tkinter as tk
-#
-# # from PIL import ImageTk, Image
-#
-#
-# root = tk.Tk()
-# root.title("test app")
-#
-#
-# def add_to_list(event=None):
-#     text = entry.get()
-#     if text:
-#         text_list.insert(tk.END, text)
-#         entry.delete(0, tk.END)
-#
-#
-# root.columnconfigure(0, weight=1)
-# root.rowconfigure(0, weight=1)
-#
-# frame = tk.Frame(root)
-# frame.grid(row=0, column=0, sticky="nsew")
-#
-# frame.columnconfigure(0, weight=1)
-# frame.rowconfigure(1, weight=1)
-#
-# entry = tk.Entry(frame, text="Add")  # vid 15:38
-# entry.grid(row=0, column=0, sticky="ew")
-#
-# entry.bind("<Return>", add_to_list)
-#
-# entry_btn = tk.Button(frame, text="Add", command=add_to_list)
-# entry_btn.grid(row=0, column=1)
-#
-# label = tk.Label(frame, text="test", font=("Arial", 10))
-# label.grid(row=3, column=0)
-#
-# text_list = tk.Listbox(frame)
-# text_list.grid(row=1, column=0, columnspan=2, sticky="nsew")
-#
-# root.mainloop()
-
-# _______________________________________________________________________________________________________________________________________________
