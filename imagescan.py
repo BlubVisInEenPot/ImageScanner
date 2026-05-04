@@ -9,8 +9,8 @@ from  datetime import *
 
 
 imageList = []
-DirPath = ""
-sortedPath = ""
+searchDir = ""
+sortDir = ""
 
 def makedir(i): # make the directories
     try:
@@ -24,10 +24,10 @@ def makedir(i): # make the directories
     #os.path.exists(i):
 
 def add_sortedFolderPath(): # add the sorted folder locations to the dictionarys
-    global imageList , sortedPath
+    global imageList , sortDir
     for file in range(0, len(imageList)):
         date = datetime.utcfromtimestamp(imageList[file]["created"])
-        imageList[file]["destFolder"] = os.path.join(sortedPath, date.strftime('%Y'), date.strftime('%B'))
+        imageList[file]["destFolder"] = os.path.join(sortDir, date.strftime('%Y'), date.strftime('%B'))
 
 def copieTo_folders(): # copie all photos to the sorted folder locations
     global imageList
@@ -85,32 +85,32 @@ def delete_dubbels():
             huidige += 1
 
 def choosePath():
-    global DirPath
+    global searchDir
 
     while True:
         chosenPath = input("path to search (blank = default): ")
 
         if chosenPath == "":
-            DirPath = "Y:\Digibende\Amstelveen\Kandidaten\Programmeren\morten"
+            searchDir = "Y:\Digibende\Amstelveen\Kandidaten\Programmeren\morten"
             break
         elif os.path.exists(chosenPath):
-            DirPath = chosenPath
+            searchDir = chosenPath
             break
         else:
             print("path does not exist")
-#  ^ vraagt voor een pat die die in DirPath zet
-def chooseSortedPath():
-    global sortedPath
+#  ^ vraagt voor een pat die die in searchDir zet
+def choosesortDir():
+    global sortDir
     looping = True
 
     while looping:
         chosenPath = input("path to store sorted folders (blank = default): ")
 
         if chosenPath == "":
-            sortedPath = "Y:\Digibende\Amstelveen\Kandidaten\Programmeren\morten\sorted photos"
+            sortDir = "Y:\Digibende\Amstelveen\Kandidaten\Programmeren\morten\sorted photos"
             break
         elif os.path.exists(chosenPath):
-            sortedPath = chosenPath
+            sortDir = chosenPath
             break
         elif not os.path.exists(chosenPath):
             print("path does not exist")
@@ -120,7 +120,7 @@ def chooseSortedPath():
                 if i == "y":
                     correctInput = True
                     makedir(chosenPath)
-                    sortedPath = chosenPath
+                    sortDir = chosenPath
                     looping = False # needs to break out of both loops
                 elif i == "n":
                     correctInput = True
@@ -163,9 +163,9 @@ def scanFolders(startFolder): #
 
 def cli():
     choosePath()
-    chooseSortedPath()
+    choosesortDir()
 #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-    scanFolders(DirPath)  # roep functie aan
+    scanFolders(searchDir)  # roep functie aan
     imageList.sort(key=sortFunc)  # soorteer de image list
     allPictures = len(imageList)
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -184,5 +184,3 @@ def cli():
     print(str(allPictures) + " images found| " + str(allPictures - len(imageList)) + " images deleted| " + str(len(imageList)) + " images sorted|")
 
 #_______________________________________________________________________________________________________________________________________________
-
-cli()
