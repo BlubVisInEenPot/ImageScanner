@@ -37,11 +37,18 @@ def open_sortDir():
     if filepath:
         entry2.insert(END, filepath)
 
-def display_photoNames():
-    global testDictionary_list
+def display_photoNames(list):
 
-    for l in range(0,len(testDictionary_list)):
-        listbox.insert(END, testDictionary_list[l]["name"])
+    for l in range(0,len(list)):
+        listbox.insert(END, list[l]["name"])
+
+def search_photos():
+    directory = entry.get()
+
+    imagescan.scanFolders(directory)  # roep functie aan
+    imagescan.imageList.sort(key=imagescan.sortFunc)
+
+    display_photoNames(imagescan.imageList)
 
 root.columnconfigure(0, weight=1)
 root.rowconfigure(0, weight=1)
@@ -91,8 +98,8 @@ frame_controll.columnconfigure(0, weight=1)
 frame_controll.columnconfigure(1, weight=1)
 frame_controll.rowconfigure(1, weight=1)
 
-entry3_btn = Button(frame_controll, text="go", font=("System native", 9))
-entry3_btn.grid(row=0, column=0, sticky="ew")
+entry3_btn = Button(frame_controll, text="search photos", font=("System native", 9), command=search_photos)
+entry3_btn.grid(row=0, column=0, sticky="w")
 
 entry4_btn = Button(frame_controll, text="go", font=("System native", 9))
 entry4_btn.grid(row=0, column=1, )
