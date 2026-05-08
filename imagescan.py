@@ -141,25 +141,31 @@ def isImage(naam): # return a True if passed extension name is in the list
     return False
 # ^ checkt met doorgegeven naam of een file een foto is
 
-def scanFolders(startFolder): #
+def scanFolders(startFolder, onUpdate = None): #
     global imageList
     bestandData = {} # maak lege dict aan
 
-    list = os.scandir(startFolder) # list = start directory
+    try:
+        list = os.scandir(startFolder) # list = start directory
 
-    for entry in list: # ga met entry de heele lijst (directory) langs
+        for entry in list: # ga met entry de heele lijst (directory) langs
 
-        if entry.is_dir(): # als de entry een directory is
-            scanFolders(os.path.join(startFolder, entry.name)) #zoek dan dieper
+            if entry.is_dir(): # als de entry een directory is
+                scanFolders(os.path.join(startFolder, entry.name), onUpdate) #zoek dan dieper
 
-        elif entry.is_file(): # als de entry een file is
-            if isImage(entry.name): # check of entry een imige is met de functie isImage()
+            elif entry.is_file(): # als de entry een file is
+                if isImage(entry.name): # check of entry een imige is met de functie isImage()
 
-                bestandData = { "name": entry.name, "path": entry.path, "size": entry.stat().st_size, "created": entry.stat().st_birthtime } # bestandData = een dict met naam,pat,size,dateCreated er in
-                imageList.append(bestandData) # voeg die dict toe aan de imageList nu is de imagelist een lijst met info over de fotos
+                    bestandData = { "name": entry.name, "path": entry.path, "size": entry.stat().st_size, "created": entry.stat().st_birthtime } # bestandData = een dict met naam,pat,size,dateCreated er in
+                    imageList.append(bestandData) # voeg die dict toe aan de imageList nu is de imagelist een lijst met info over de fotos
 
-    add_sortedFolderPath()
-    list.close()
+        add_sortedFolderPath()
+        list.close()
+        if onUpdate is not None:
+            onUpdate()
+    except PermissionError:
+
+        pass
 
 def cli():
     choosePath()

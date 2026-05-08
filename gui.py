@@ -1,6 +1,6 @@
 from tkinter import *
 from PIL import ImageTk, Image
-from tkinter import filedialog
+from tkinter import filedialog, messagebox
 import imagescan
 
 root = Tk()
@@ -42,11 +42,25 @@ def display_photoNames(list):
     for l in range(0,len(list)):
         listbox.insert(END, list[l]["name"])
 
+updateCounter = 0
+def doOnUpdate():
+  global root, updateCounter
+  updateCounter += 1
+  print(str(updateCounter)+ " folders scanned")
+  root.update()
+
 def search_photos():
     directory = entry.get()
 
-    imagescan.scanFolders(directory)  # roep functie aan
-    imagescan.imageList.sort(key=imagescan.sortFunc)
+    try:
+        imagescan.scanFolders(directory, doOnUpdate)  # roep functie aan
+        imagescan.imageList.sort(key=imagescan.sortFunc)
+    except FileNotFoundError:
+        messagebox.showerror(title=None, message="niet gevonden")
+    # except PermissionError:
+    #     messagebox.showerror(title=None, message="no permision to file")
+    except Exception as e:
+        print(type(e))
 
     display_photoNames(imagescan.imageList)
 
@@ -74,9 +88,9 @@ entry_btn.grid(row=0, column=1)
 listbox = Listbox(frame_left)
 listbox.grid(row=1, column=0, columnspan=2, sticky="nsew")
 
-scrollbar = Scrollbar(frame_left, orient="horizontal", command=listbox.xview)
-scrollbar.grid(row=2, column=0, columnspan=2, sticky="ew")
-listbox.configure(xscrollcommand=scrollbar.set)
+# scrollbar = Scrollbar(frame_left, orient="horizontal", command=listbox.xview)
+# scrollbar.grid(row=2, column=0, columnspan=2, sticky="ew")
+# listbox.configure(xscrollcommand=scrollbar.set)
 #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 frame_right = Frame(root)
 frame_right.grid(row=0, column=1, sticky="nsew")
