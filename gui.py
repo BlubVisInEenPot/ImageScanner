@@ -46,7 +46,8 @@ updateCounter = 0
 def doOnUpdate():
   global root, updateCounter
   updateCounter += 1
-  print(str(updateCounter)+ " folders scanned")
+  # print(str(updateCounter)+ " folders scanned")
+  label.config(text= f"scanned folders: {updateCounter}")
   root.update()
 
 def search_photos():
@@ -69,8 +70,6 @@ root.rowconfigure(0, weight=1)
 
 root.columnconfigure(1, weight=1)
 root.rowconfigure(1, weight=1)
-
-root.rowconfigure(2, weight=1)
 
 #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 frame_left = Frame(root)
@@ -106,16 +105,20 @@ entry2_btn.grid(row=0, column=1)
 
 #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 frame_controll = Frame(root)
-frame_controll.grid(row=1, column=0, columnspan=2, sticky="nsew")
+frame_controll.grid(row=1, column=0, columnspan=2, sticky="ew")
 
 frame_controll.columnconfigure(0, weight=1)
 frame_controll.columnconfigure(1, weight=1)
-frame_controll.rowconfigure(1, weight=1)
+frame_controll.columnconfigure(2, weight=1)
+frame_controll.rowconfigure(0, weight=1)
 
 entry3_btn = Button(frame_controll, text="search photos", font=("System native", 9), command=search_photos)
-entry3_btn.grid(row=0, column=0, sticky="w")
+entry3_btn.grid(row=0, column=0, sticky="ew")
 
-entry4_btn = Button(frame_controll, text="go", font=("System native", 9))
-entry4_btn.grid(row=0, column=1, )
+label = Label(frame_controll, text= f"scanned folders: {updateCounter}", font=("System native", 9))
+label.grid(row=0, column=1, sticky="w")
+
+entry4_btn = Button(frame_controll, text="button", font=("System native", 9))
+entry4_btn.grid(row=0, column=2, sticky="e")
 
 root.mainloop()

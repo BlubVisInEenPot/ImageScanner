@@ -164,7 +164,7 @@ def scanFolders(startFolder, onUpdate = None): #
         if onUpdate is not None:
             onUpdate()
     except PermissionError:
-
+        print("permision error")
         pass
 
 def cli():
