@@ -4,13 +4,10 @@ import tkinter as tk
 from PIL import ImageTk, Image
 from  datetime import *
 
-# to do
-# 1:
-
-
 imageList = []
 searchDir = ""
 sortDir = ""
+
 
 def makedir(i): # make the directories
     try:

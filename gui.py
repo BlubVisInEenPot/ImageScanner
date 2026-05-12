@@ -6,9 +6,6 @@ import imagescan
 root = Tk()
 root.title("image sorter")
 
-testDictionary_list = [{"name" : "test1", "size" : 3987 },{"name" : "test2", "size" : 197 },{"name" : "test3", "size" : 481 }]
-
-
 def openfilename():
 
     # open file dialog box to select image
@@ -25,7 +22,6 @@ def open_searchDir():
         entry.delete(0, END)
     if filepath:
         entry.insert(END, filepath)
-        
 
 def open_sortDir():
     global sortDir
@@ -65,60 +61,67 @@ def search_photos():
 
     display_photoNames(imagescan.imageList)
 
+
 root.columnconfigure(0, weight=1)
-root.rowconfigure(0, weight=1)
-
-root.columnconfigure(1, weight=1)
+root.rowconfigure(0, weight=0)
 root.rowconfigure(1, weight=1)
+root.rowconfigure(2, weight=0)
 
 #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-frame_left = Frame(root)
-frame_left.grid(row=0, column=0, sticky="nsew")
+frame_top = Frame(root)
+frame_top.grid(row=0, column=0, sticky="ew")
+###
+frame_top.columnconfigure(0, weight=0)
+frame_top.columnconfigure(1, weight=1)
+frame_top.columnconfigure(2, weight=1)
+frame_top.columnconfigure(3, weight=0)
+frame_top.rowconfigure(0, weight=0)
+###
 
-frame_left.columnconfigure(0, weight=1)
-frame_left.rowconfigure(1, weight=1)
+entry = Entry(frame_top)
+entry.grid(row=0, column=0, sticky="w")
 
-entry = Entry(frame_left)
-entry.grid(row=0, column=0, sticky="ew")
+button_1 = Button(frame_top, text="select source", font=("System native", 9), command=open_searchDir)
+button_1.grid(row=0, column=1, sticky="w")
 
-entry_btn = Button(frame_left, text="select source", font=("System native", 9), command=open_searchDir)
-entry_btn.grid(row=0, column=1)
+entry2 = Entry(frame_top)
+entry2.grid(row=0, column=2, sticky="e")
 
-listbox = Listbox(frame_left)
-listbox.grid(row=1, column=0, columnspan=2, sticky="nsew")
+button_2 = Button(frame_top, text="select destination", font=("System native", 9), command=open_sortDir)
+button_2.grid(row=0, column=3, sticky="e")
 
-# scrollbar = Scrollbar(frame_left, orient="horizontal", command=listbox.xview)
-# scrollbar.grid(row=2, column=0, columnspan=2, sticky="ew")
-# listbox.configure(xscrollcommand=scrollbar.set)
-#- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-frame_right = Frame(root)
-frame_right.grid(row=0, column=1, sticky="nsew")
-
-frame_right.columnconfigure(0, weight=1)
-frame_right.rowconfigure(1, weight=1)
-
-entry2 = Entry(frame_right)
-entry2.grid(row=0, column=0, sticky="ew")
-
-entry2_btn = Button(frame_right, text="select destination", font=("System native", 9), command=open_sortDir)
-entry2_btn.grid(row=0, column=1)
 
 #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-frame_controll = Frame(root)
-frame_controll.grid(row=1, column=0, columnspan=2, sticky="ew")
+frame_middle = Frame(root)
+frame_middle.grid(row=1, column=0, sticky="nsew")
+###
+frame_middle.columnconfigure(0, weight=1)
+frame_middle.columnconfigure(1, weight=1)
+frame_middle.rowconfigure(1, weight=1)
+###
 
-frame_controll.columnconfigure(0, weight=1)
-frame_controll.columnconfigure(1, weight=1)
-frame_controll.columnconfigure(2, weight=1)
-frame_controll.rowconfigure(0, weight=1)
+listbox = Listbox(frame_middle)
+listbox.grid(row=1, column=0, sticky="nsew")
 
-entry3_btn = Button(frame_controll, text="search photos", font=("System native", 9), command=search_photos)
-entry3_btn.grid(row=0, column=0, sticky="ew")
+#- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+frame_bottom = Frame(root)
+frame_bottom.grid(row=2, column=0, sticky="ew") #, columnspan=2, sticky="ew")
+###
+frame_bottom.columnconfigure(0, weight=1)
+frame_bottom.columnconfigure(1, weight=1)
+frame_bottom.columnconfigure(2, weight=1)
+frame_bottom.rowconfigure(0, weight=0)
+###
 
-label = Label(frame_controll, text= f"scanned folders: {updateCounter}", font=("System native", 9))
-label.grid(row=0, column=1, sticky="w")
+button_3 = Button(frame_bottom, text="search photos", font=("System native", 9), command=search_photos)
+button_3.grid(row=0, column=0, sticky="w")
 
-entry4_btn = Button(frame_controll, text="button", font=("System native", 9))
-entry4_btn.grid(row=0, column=2, sticky="e")
+button_4 = Button(frame_bottom, text="button", font=("System native", 9))
+button_4.grid(row=0, column=2, sticky="e")
+
+label = Label(frame_bottom, text= f"scanned folders: {updateCounter}", font=("System native", 9))
+label.grid(row=0, column=1)
+
+#- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 root.mainloop()
