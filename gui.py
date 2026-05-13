@@ -4,6 +4,9 @@ from tkinter import filedialog, messagebox
 import imagescan
 
 root = Tk()
+
+root.geometry("600x300")
+root.minsize(550, 150)
 root.title("image sorter")
 
 def openfilename():
@@ -57,7 +60,7 @@ def search_photos():
     # except PermissionError:
     #     messagebox.showerror(title=None, message="no permision to file")
     except Exception as e:
-        print(type(e))
+        print(f"error: {type(e)}")
 
     display_photoNames(imagescan.imageList)
 
@@ -71,24 +74,24 @@ root.rowconfigure(2, weight=0)
 frame_top = Frame(root)
 frame_top.grid(row=0, column=0, sticky="ew")
 ###
-frame_top.columnconfigure(0, weight=0)
-frame_top.columnconfigure(1, weight=1)
-frame_top.columnconfigure(2, weight=1)
-frame_top.columnconfigure(3, weight=0)
-frame_top.rowconfigure(0, weight=0)
+# frame_top.columnconfigure(0, weight=0)
+# frame_top.columnconfigure(1, weight=1)
+# frame_top.columnconfigure(2, weight=1)
+# frame_top.columnconfigure(3, weight=0)
+# frame_top.rowconfigure(0, weight=0)
 ###
 
 entry = Entry(frame_top)
-entry.grid(row=0, column=0, sticky="w")
+entry.pack(side=LEFT, fill=BOTH, expand=True)
 
 button_1 = Button(frame_top, text="select source", font=("System native", 9), command=open_searchDir)
-button_1.grid(row=0, column=1, sticky="w")
+button_1.pack(side=LEFT, expand=False)
 
 entry2 = Entry(frame_top)
-entry2.grid(row=0, column=2, sticky="e")
+entry2.pack(side=LEFT, fill=BOTH, expand=True)
 
 button_2 = Button(frame_top, text="select destination", font=("System native", 9), command=open_sortDir)
-button_2.grid(row=0, column=3, sticky="e")
+button_2.pack(side=LEFT, expand=False)
 
 
 #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
