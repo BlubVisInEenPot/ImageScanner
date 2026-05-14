@@ -1,7 +1,8 @@
-string = "j"
-condition = 1
+import os
 
-if string and condition == 1:
-    print("True")
-else:
-    print("False")
+list = os.scandir("/home/OempaLoempa/Pictures/")
+for entry in list :
+    if entry.is_dir() or entry.is_file():
+        print(entry.stat().st_birthtime)
+        print(entry.name)
+list.close() # Sluiten is netjes om systeem resources te laten vrijmaken
