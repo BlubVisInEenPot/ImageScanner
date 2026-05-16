@@ -1,3 +1,9 @@
+# to do
+# settings:
+# setting om sorting uit te zetten voor bepaalde cameras
+
+
+
 from tkinter import *
 from PIL import ImageTk, Image
 from tkinter import filedialog, messagebox
