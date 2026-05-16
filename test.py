@@ -11,7 +11,7 @@ def get_creationDate(entry):
 
     
 
-list = os.scandir("/home/OempaLoempa/Pictures/")
+list = os.scandir("C:\Program Files")#"/home/OempaLoempa/Pictures/"
 for entry in list :
     if entry.is_dir() or entry.is_file():
         print(get_creationDate(entry))
