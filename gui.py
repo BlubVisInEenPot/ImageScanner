@@ -1,7 +1,9 @@
 # to do
 # settings:
 # setting om sorting uit te zetten voor bepaalde cameras
-
+# functions:
+# date extractor function
+# redo isImage():  ## als je alleen kijkt naar of bijvoorbeeld jpg in de naam zit dan kan je een bestant hebben die bestant.jpg.py heet
 
 
 from tkinter import *

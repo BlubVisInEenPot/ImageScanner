@@ -1,8 +1,14 @@
+# moet def find_date(path): nog fixen path moet een class zijn bij: path.stat().st_...... 
+# maar een pat bij: if check_fileType(path, "jpeg"):
+
+
+
+
 import os
 from  datetime import *
 from PIL import Image
 from PIL.ExifTags import TAGS
-
+import filetype
 
 
 
@@ -37,18 +43,37 @@ def find_date(path):
     except:
         result["st_birthtime"] = 0
     
-
+    if check_fileType(path, "jpeg"):
+        
 
 
 
     return min(result.values())
 
-    
-list = os.scandir(r"/home/OempaLoempa/Downloads")
 
-for entry in list:
-    print(entry.stat().st_type)
+def check_fileType(path, extension):
+    if extension == "picture":
+        imageExt = ["jpg", "png", "jpeg", "tiff", "raw", "dng", "gif", ]
+    else:
+        imageExt = [extension]
 
+    i = filetype.guess(path)
+
+    if i is None:
+        return False
+    else:
+        for ext in imageExt:
+            print(str(i.extension))
+            if ext == str(i.extension):
+                return True
+    return False
+
+
+path = os.scandir(r"/home/OempaLoempa/Downloads")
+
+for entry in path:
+    print(type(entry))
+# path.stat().st_mtime
 
 
 # a = st_atime
