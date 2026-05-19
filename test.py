@@ -3,7 +3,7 @@
 
 
 
-
+# import gui
 import os
 from  datetime import *
 from PIL import Image
@@ -20,34 +20,41 @@ def getExif_data(path, data_type):
 
     return(exif.get(data_type))
 
-def find_date(path):
+def find_date(entry):
     result = {}
 
     try:
-        result["st_atime"] = (path.stat().st_atime)
+        result["st_atime"] = (entry.stat().st_atime)
     except:
         result["st_atime"] = 0
 
     try:
-        result["st_mtime"] = (path.stat().st_mtime)
+        result["st_mtime"] = (entry.stat().st_mtime)
     except:
         result["st_mtime"] = 0
 
     try:
-        result["st_ctime"] = (path.stat().st_ctime)
+        result["st_ctime"] = (entry.stat().st_ctime)
     except:
-        result["st_ctime"] = 0    
+        result["st_ctime"] = 0
 
     try:
-        result["st_birthtime"] = (path.stat().st_birthtime)
+        result["st_birthtime"] = (entry.stat().st_birthtime)
     except:
         result["st_birthtime"] = 0
-    
-    if check_fileType(path, "jpeg"):
-        
+
+    try:
+        if check_fileType(entry.path, "jpg"):
+            try:
+                print(getExif_data(entry.path, date))
+            except Exception as e:
+                print(f"errorIn_getExif_data: {e}")
+    except Exception as b:
+        print(f"errorIn_check_fileType: {b}")
 
 
 
+    # print(min(result.values()))
     return min(result.values())
 
 
@@ -68,11 +75,14 @@ def check_fileType(path, extension):
                 return True
     return False
 
+temp_path = r"C:\Users\morten.goudswaard\Downloads"
+path = os.scandir(temp_path) #gui.searchDirectory
 
-path = os.scandir(r"/home/OempaLoempa/Downloads")
+# print(check_fileType(temp_path, "jpg"))
 
 for entry in path:
-    print(type(entry))
+    if entry.is_file():
+        print(find_date(entry))
 # path.stat().st_mtime
 
 

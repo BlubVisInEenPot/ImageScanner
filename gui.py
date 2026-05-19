@@ -4,7 +4,9 @@
 # functions:
 # date extractor function
 # redo isImage():  ## als je alleen kijkt naar of bijvoorbeeld jpg in de naam zit dan kan je een bestant hebben die bestant.jpg.py heet
-
+# bugs:
+# soms als ik voor de tweede keer een pad open en scan folders klick dan doet die het niet meer
+# als ik voor een tweede keer een andere map scan voegt die de gevonden fotos toe aan de vorige gevonden fotos
 
 from tkinter import *
 from PIL import ImageTk, Image
@@ -16,6 +18,8 @@ root = Tk()
 root.geometry("600x300")
 root.minsize(550, 150)
 root.title("image sorter")
+
+searchDirectory = r"C:\Users\morten.goudswaard\Downloads"
 
 def openfilename():
 
@@ -58,10 +62,11 @@ def doOnUpdate():
   root.update()
 
 def search_photos():
-    directory = entry.get()
+    global searchDirectory
+    searchDirectory = entry.get()
 
     try:
-        imagescan.scanFolders(directory, doOnUpdate)  # roep functie aan
+        imagescan.scanFolders(searchDirectory, doOnUpdate)  # roep functie aan
         imagescan.imageList.sort(key=imagescan.sortFunc)
     except FileNotFoundError:
         messagebox.showerror(title=None, message="niet gevonden")
