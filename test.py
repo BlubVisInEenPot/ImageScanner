@@ -49,19 +49,15 @@ def find_date(entry):
 
         if getExif_data(entry.path, "DateTime") != None:
             result_exif["Datetime"] = getExif_data(entry.path, "DateTime")
-            print("1")
+
         if getExif_data(entry.path, "DateTimeOriginal") != None:
             result_exif["DateTimeOriginal"] = getExif_data(entry.path, "DateTimeOriginal")
-            print("2")
+
         if getExif_data(entry.path, "DateTimeDigitized") != None:
             result_exif["DateTimeDigitized"] = getExif_data(entry.path, "DateTimeDigitized")
-            print("3")
-    print(str(result_exif) + "~~")
 
-
-
-    # print(f"{result_exif} ~~~")
-    # print(min(result.values()))
+    
+    
     return min(result.values())
 
 
@@ -82,14 +78,14 @@ def check_fileType(path, extension):
                 return True
     return False
 
-# temp_path = r"/home/OempaLoempa/Downloads/" #/home/OempaLoempa/Downloads/  #C:\Users\morten.goudswaard\Downloads #c:\Users\vboxuser\Pictures
-# path = os.scandir(temp_path) #gui.searchDirectory
+temp_path = r"/home/OempaLoempa/Downloads/" #/home/OempaLoempa/Downloads/  #C:\Users\morten.goudswaard\Downloads #c:\Users\vboxuser\Pictures
+path = os.scandir(temp_path) #gui.searchDirectory
 
-print(getExif_data("/home/OempaLoempa/Downloads/image.jpg", "DateTimeOriginal"))
+# print(getExif_data("/home/OempaLoempa/Downloads/image.jpg", "DateTimeOriginal"))
 
-# for entry in path:
-#     if entry.is_file():
-#         print(find_date(entry))
+for entry in path:
+    if entry.is_file():
+        print(find_date(entry))
 
 
 
