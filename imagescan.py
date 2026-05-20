@@ -163,7 +163,7 @@ def scanFolders(startFolder, onUpdate = None): #
     except PermissionError:
         print("permision error")
         pass
-        print(imageList)##!!!!
+    print(imageList)##!!!!
 def cli():
     choosePath()
     choosesortDir()
