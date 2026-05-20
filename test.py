@@ -46,7 +46,9 @@ def find_date(entry):
     try:
         if check_fileType(entry.path, "jpg"):
             try:
+                print("~~~~~~~~~")
                 print(getExif_data(entry.path, date))
+                print("~~~~~~~~~")
             except Exception as e:
                 print(f"errorIn_getExif_data: {e}")
     except Exception as b:
@@ -75,7 +77,7 @@ def check_fileType(path, extension):
                 return True
     return False
 
-temp_path = r"C:\Users\morten.goudswaard\Downloads"
+temp_path = r"/home/OempaLoempa/Downloads/" #C:\Users\morten.goudswaard\Downloads
 path = os.scandir(temp_path) #gui.searchDirectory
 
 # print(check_fileType(temp_path, "jpg"))
