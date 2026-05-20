@@ -56,9 +56,13 @@ def find_date(entry):
         if getExif_data(entry.path, "DateTimeDigitized") != None:
             result_exif["DateTimeDigitized"] = getExif_data(entry.path, "DateTimeDigitized")
 
+    for methods in result_exif:
+        dt = datetime.strptime(result_exif[methods], "%Y:%m:%d %H:%M:%S")
+        result[methods] = dt
     
-    
-    return min(result.values())
+    return result
+
+    # return min(result.values())
 
 
 def check_fileType(path, extension):
