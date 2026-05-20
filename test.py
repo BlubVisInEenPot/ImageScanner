@@ -77,7 +77,7 @@ def check_fileType(path, extension):
                 return True
     return False
 
-temp_path = r"/home/OempaLoempa/Downloads/" #C:\Users\morten.goudswaard\Downloads
+temp_path = r"c:\Users\vboxuser\Pictures" #/home/OempaLoempa/Downloads/  #C:\Users\morten.goudswaard\Downloads #c:\Users\vboxuser\Pictures
 path = os.scandir(temp_path) #gui.searchDirectory
 
 # print(check_fileType(temp_path, "jpg"))
