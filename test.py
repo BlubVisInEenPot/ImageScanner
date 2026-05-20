@@ -22,40 +22,44 @@ def getExif_data(path, data_type):
 
 def find_date(entry):
     result = {}
+    result_exif = {}
 
     try:
         result["st_atime"] = (entry.stat().st_atime)
     except:
-        result["st_atime"] = 0
+        pass
 
     try:
         result["st_mtime"] = (entry.stat().st_mtime)
     except:
-        result["st_mtime"] = 0
+        pass
 
     try:
         result["st_ctime"] = (entry.stat().st_ctime)
     except:
-        result["st_ctime"] = 0
+        pass
 
     try:
         result["st_birthtime"] = (entry.stat().st_birthtime)
     except:
-        result["st_birthtime"] = 0
-
-    try:
-        if check_fileType(entry.path, "jpg"):
-            try:
-                print("~~~~~~~~~")
-                print(getExif_data(entry.path, date))
-                print("~~~~~~~~~")
-            except Exception as e:
-                print(f"errorIn_getExif_data: {e}")
-    except Exception as b:
-        print(f"errorIn_check_fileType: {b}")
+        pass
 
 
+    if check_fileType(entry.path, "jpg"):
 
+        if getExif_data(entry.path, "DateTime") != None:
+            result_exif["Datetime"] = getExif_data(entry.path, "DateTime")
+
+        elif getExif_data(entry.path, "DateTimeOriginal") != None:
+            result_exif["DateTimeOriginal"] = getExif_data(entry.path, "DateTimeOriginal")
+
+        elif getExif_data(entry.path, "DateTimeDigitized") != None:
+            result_exif["DateTimeDigitized"] = getExif_data(entry.path, "DateTimeDigitized")
+
+
+
+
+    # print(f"{result_exif} ~~~")
     # print(min(result.values()))
     return min(result.values())
 
@@ -77,15 +81,25 @@ def check_fileType(path, extension):
                 return True
     return False
 
-temp_path = r"c:\Users\vboxuser\Pictures" #/home/OempaLoempa/Downloads/  #C:\Users\morten.goudswaard\Downloads #c:\Users\vboxuser\Pictures
+temp_path = r"/home/OempaLoempa/Downloads/" #/home/OempaLoempa/Downloads/  #C:\Users\morten.goudswaard\Downloads #c:\Users\vboxuser\Pictures
 path = os.scandir(temp_path) #gui.searchDirectory
 
-# print(check_fileType(temp_path, "jpg"))
+# print(getExif_data("/home/OempaLoempa/Downloads/image_1779272043812.jpg", "abrakadabra"))
 
 for entry in path:
     if entry.is_file():
-        print(find_date(entry))
-# path.stat().st_mtime
+        # print(f"{entry.path}: {find_date(entry)}")
+        print(type(datetime.utcfromtimestamp(entry.stat().st_atime)))
+        try:
+            print(type(getExif_data(entry.path, "DateTime")))
+        except:
+            pass
+
+
+
+
+
+
 
 
 # a = st_atime
