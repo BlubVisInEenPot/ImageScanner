@@ -2,7 +2,9 @@ import os
 import shutil
 import tkinter as tk
 from PIL import ImageTk, Image
+from PIL.ExifTags import TAGS
 from  datetime import *
+import filetype
 
 imageList = []
 searchDir = ""
@@ -23,7 +25,7 @@ def makedir(i): # make the directories
 def add_sortedFolderPath(): # add the sorted folder locations to the dictionarys
     global imageList , sortDir
     for file in range(0, len(imageList)):
-        date = datetime.utcfromtimestamp(imageList[file]["created"])
+        date = imageList[file]["created"]
         imageList[file]["destFolder"] = os.path.join(sortDir, date.strftime('%Y'), date.strftime('%B'))
 
 def copieTo_folders(): # copie all photos to the sorted folder locations
@@ -40,7 +42,7 @@ def delete_byteDubbels():
     counter = 0
 
     if not len(imageList) > 0:
-        print("empty list")
+        print("no imeges in list (def delete_byteDubbels)")
 
     while counter + 1 < len(imageList):
 
@@ -130,13 +132,70 @@ def choosesortDir():
 def sortFunc(dictionary):
     return "{:10d}".format(dictionary["size"]) + dictionary["name"].upper()  # RETURN de naam van de gegeven dictionery
 #  ^ soorteert de doorgegeven dictionary eerst op naam en dan op maat
-def isImage(naam): # return a True if passed extension name is in the list
-    imageExt = [".jpg", ".png", ".jpeg", ".tiff", ".raw", ".dng", ".gif", ]
-    for ext in imageExt:
-        if ext in naam:
-            return True
+def check_fileType(path, extension):
+    if extension == "picture":
+        imageExt = ["jpg", "png", "jpeg", "tiff", "raw", "dng", "gif", "heic", "heif", "hif", "heics", "heifs", "avci"]
+    else:
+        imageExt = extension
+
+    i = filetype.guess(path)
+
+    if i is None:
+        return False
+    else:
+        for ext in imageExt:
+            if ext == str(i.extension):
+                return True
     return False
-# ^ checkt met doorgegeven naam of een file een foto is
+
+def getExif_data(path, data_type):
+    imagename = path
+    image = Image.open(imagename)
+    exifdata = image.getexif()
+    exif = { TAGS.get(tag_id, tag_id): value for tag_id, value in exifdata.items() }
+
+    return(exif.get(data_type))
+
+def find_date(entry):
+    result = {}
+    result_exif = {}
+
+    try:
+        result["st_atime"] = datetime.utcfromtimestamp(entry.stat().st_atime)
+    except:
+        pass
+
+    try:
+        result["st_mtime"] = datetime.utcfromtimestamp(entry.stat().st_mtime)
+    except:
+        pass
+
+    try:
+        result["st_ctime"] = datetime.utcfromtimestamp(entry.stat().st_ctime)
+    except:
+        pass
+
+    try:
+        result["st_birthtime"] = datetime.utcfromtimestamp(entry.stat().st_birthtime)
+    except:
+        pass
+
+
+    if check_fileType(entry.path, ["jpg", "tiff", "jpeg", "heic", "heif", "hif", "heics", "heifs", "avci"]):#["jpg", "tiff", "jpeg", "heic", "heif", "hif", "heics", "heifs", "avci"]
+        if getExif_data(entry.path, "DateTime") != None:
+            result_exif["Datetime"] = getExif_data(entry.path, "DateTime")
+
+        if getExif_data(entry.path, "DateTimeOriginal") != None:
+            result_exif["DateTimeOriginal"] = getExif_data(entry.path, "DateTimeOriginal")
+
+        if getExif_data(entry.path, "DateTimeDigitized") != None:
+            result_exif["DateTimeDigitized"] = getExif_data(entry.path, "DateTimeDigitized")
+
+    for methods in result_exif:
+        dt = datetime.strptime(result_exif[methods], "%Y:%m:%d %H:%M:%S")
+        result[methods] = dt
+    
+    return min(result.values())
 
 def scanFolders(startFolder, onUpdate = None): #
     global imageList
@@ -151,9 +210,9 @@ def scanFolders(startFolder, onUpdate = None): #
                 scanFolders(os.path.join(startFolder, entry.name), onUpdate) #zoek dan dieper
 
             elif entry.is_file(): # als de entry een file is
-                if isImage(entry.name): # check of entry een imige is met de functie isImage()
+                if check_fileType(entry.path, "picture"):
 
-                    bestandData = { "name": entry.name, "path": entry.path, "size": entry.stat().st_size, "created": entry.stat().st_birthtime } # bestandData = een dict met naam,pat,size,dateCreated er in
+                    bestandData = { "name": entry.name, "path": entry.path, "size": entry.stat().st_size, "created": find_date(entry)} # bestandData = een dict met naam,pat,size,dateCreated er in
                     imageList.append(bestandData) # voeg die dict toe aan de imageList nu is de imagelist een lijst met info over de fotos
 
         add_sortedFolderPath()
@@ -163,7 +222,7 @@ def scanFolders(startFolder, onUpdate = None): #
     except PermissionError:
         print("permision error")
         pass
-    print(imageList)##!!!!
+
 def cli():
     choosePath()
     choosesortDir()

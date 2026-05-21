@@ -1,13 +1,3 @@
-# to do
-# settings:
-# setting om sorting uit te zetten voor bepaalde cameras
-# functions:
-# date extractor function
-# redo isImage():  ## als je alleen kijkt naar of bijvoorbeeld jpg in de naam zit dan kan je een bestant hebben die bestant.jpg.py heet
-# bugs:
-# soms als ik voor de tweede keer een pad open en scan folders klick dan doet die het niet meer
-# als ik voor een tweede keer een andere map scan voegt die de gevonden fotos toe aan de vorige gevonden fotos
-
 from tkinter import *
 from PIL import ImageTk, Image
 from tkinter import filedialog, messagebox
