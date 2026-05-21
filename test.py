@@ -25,27 +25,27 @@ def find_date(entry):
     result_exif = {}
 
     try:
-        result["st_atime"] = (entry.stat().st_atime)
+        result["st_atime"] = datetime.utcfromtimestamp(entry.stat().st_atime)
     except:
         pass
 
     try:
-        result["st_mtime"] = (entry.stat().st_mtime)
+        result["st_mtime"] = datetime.utcfromtimestamp(entry.stat().st_mtime)
     except:
         pass
 
     try:
-        result["st_ctime"] = (entry.stat().st_ctime)
+        result["st_ctime"] = datetime.utcfromtimestamp(entry.stat().st_ctime)
     except:
         pass
 
     try:
-        result["st_birthtime"] = (entry.stat().st_birthtime)
+        result["st_birthtime"] = datetime.utcfromtimestamp(entry.stat().st_birthtime)
     except:
         pass
 
 
-    if check_fileType(entry.path, "jpg"):
+    if check_fileType(entry.path, ["jpg", "tiff", "jpeg", "heic", "heif", "hif", "heics", "heifs", "avci"]):
 
         if getExif_data(entry.path, "DateTime") != None:
             result_exif["Datetime"] = getExif_data(entry.path, "DateTime")
@@ -60,14 +60,13 @@ def find_date(entry):
         dt = datetime.strptime(result_exif[methods], "%Y:%m:%d %H:%M:%S")
         result[methods] = dt
     
-    return result
-
-    # return min(result.values())
+    print(min(result, key = result.get))
+    return min(result.values())
 
 
 def check_fileType(path, extension):
     if extension == "picture":
-        imageExt = ["jpg", "png", "jpeg", "tiff", "raw", "dng", "gif", ]
+        imageExt = ["jpg", "png", "jpeg", "tiff", "raw", "dng", "gif", "heic", "heif", "hif", "heics", "heifs", "avci"]
     else:
         imageExt = [extension]
 
@@ -90,6 +89,7 @@ path = os.scandir(temp_path) #gui.searchDirectory
 for entry in path:
     if entry.is_file():
         print(find_date(entry))
+
 
 
 
