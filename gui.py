@@ -39,7 +39,8 @@ def open_sortDir():
         entry2.insert(END, filepath)
 
 def display_photoNames(list):
-
+    print("delete")
+    listbox.delete(0, END)
     for l in range(0,len(list)):
         listbox.insert(END, list[l]["name"])
 
@@ -52,8 +53,10 @@ def doOnUpdate():
   root.update()
 
 def search_photos():
-    global searchDirectory
+    global searchDirectory, updateCounter
     searchDirectory = entry.get()
+    imagescan.imageList = []
+    updateCounter = 0
 
     try:
         imagescan.scanFolders(searchDirectory, doOnUpdate)  # roep functie aan
@@ -108,6 +111,10 @@ frame_middle.rowconfigure(1, weight=1)
 
 listbox = Listbox(frame_middle)
 listbox.grid(row=1, column=0, sticky="nsew")
+
+scrollBar = Scrollbar(frame_middle)
+scrollBar.grid(row=1, column=1, sticky="nsw")
+scrollBar.config( command = listbox.yview)
 
 #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 frame_bottom = Frame(root)
