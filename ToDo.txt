@@ -13,9 +13,8 @@ bugs:
 1 soms als ik voor de tweede keer een pad open en scan folders klick dan doet die het niet meer
 
 gui:
-add verticle scroll bar zo dat je met je muis kan scrollen
+
 
 overige:
 folders scanned weet niet of dat correct is
 ongebruikte functies delete
-give error pop up for all errors

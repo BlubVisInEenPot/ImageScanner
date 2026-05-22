@@ -39,7 +39,6 @@ def open_sortDir():
         entry2.insert(END, filepath)
 
 def display_photoNames(list):
-    print("delete")
     listbox.delete(0, END)
     for l in range(0,len(list)):
         listbox.insert(END, list[l]["name"])
@@ -62,11 +61,14 @@ def search_photos():
         imagescan.scanFolders(searchDirectory, doOnUpdate)  # roep functie aan
         imagescan.imageList.sort(key=imagescan.sortFunc)
     except FileNotFoundError:
-        messagebox.showerror(title=None, message="niet gevonden")
-    # except PermissionError:
-    #     messagebox.showerror(title=None, message="no permision to file")
+        messagebox.showinfo(title="file not found error", message=f"could not find directory: \n{searchDirectory}")
+
+    except OSError as e:
+        messagebox.showerror(title="OSError", message=f"error: \n{e}")
+
     except Exception as e:
         print(f"error: {type(e)}")
+        messagebox.showerror(title="unknown error", message=f"error: \n{e}")
 
     display_photoNames(imagescan.imageList)
 

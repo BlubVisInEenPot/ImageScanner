@@ -3,8 +3,11 @@ import shutil
 import tkinter as tk
 from PIL import ImageTk, Image
 from PIL.ExifTags import TAGS
+from pillow_heif import register_heif_opener
 from  datetime import *
 import filetype
+
+register_heif_opener()
 
 imageList = []
 searchDir = ""
@@ -83,52 +86,6 @@ def delete_dubbels():
             vorige = imageList[huidige]
             huidige += 1
 
-def choosePath():
-    global searchDir
-
-    while True:
-        chosenPath = input("path to search (blank = default): ")
-
-        if chosenPath == "":
-            searchDir = "Y:\Digibende\Amstelveen\Kandidaten\Programmeren\morten"
-            break
-        elif os.path.exists(chosenPath):
-            searchDir = chosenPath
-            break
-        else:
-            print("path does not exist")
-#  ^ vraagt voor een pat die die in searchDir zet
-def choosesortDir():
-    global sortDir
-    looping = True
-
-    while looping:
-        chosenPath = input("path to store sorted folders (blank = default): ")
-
-        if chosenPath == "":
-            sortDir = "Y:\Digibende\Amstelveen\Kandidaten\Programmeren\morten\sorted photos"
-            break
-        elif os.path.exists(chosenPath):
-            sortDir = chosenPath
-            break
-        elif not os.path.exists(chosenPath):
-            print("path does not exist")
-            correctInput = False
-            while correctInput == False:
-                i = input("do you want to make it y/n: ")
-                if i == "y":
-                    correctInput = True
-                    makedir(chosenPath)
-                    sortDir = chosenPath
-                    looping = False # needs to break out of both loops
-                elif i == "n":
-                    correctInput = True
-                elif i != "y" or i != "n":
-                    print("type y for yes or n for no")
-
-        else:
-            print("error")
-#  ^ vraagt voor een pat waar die de gesoorteerde mapjes met fotos neer zet
 def sortFunc(dictionary):
     return "{:10d}".format(dictionary["size"]) + dictionary["name"].upper()  # RETURN de naam van de gegeven dictionery
 #  ^ soorteert de doorgegeven dictionary eerst op naam en dan op maat
@@ -223,26 +180,3 @@ def scanFolders(startFolder, onUpdate = None): #
         print("permision error")
         pass
 
-def cli():
-    choosePath()
-    choosesortDir()
-#- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-    scanFolders(searchDir)  # roep functie aan
-    imageList.sort(key=sortFunc)  # soorteer de image list
-    allPictures = len(imageList)
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-    while True:
-        userInput = input("delete dubbel images by (size and name)(1) or (byte by byte)(2): ")
-        if userInput == "1":
-            delete_dubbels()  # delete the pictures with the same name and size
-            break
-        elif userInput == "2":
-            delete_byteDubbels()
-            break
-        else:
-            print("choose an option by typing the corresponding number. eg 2")
-# - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-    copieTo_folders()  # copie the fount pictures to thare sorted folder path
-    print(str(allPictures) + " images found| " + str(allPictures - len(imageList)) + " images deleted| " + str(len(imageList)) + " images sorted|")
-
-#_______________________________________________________________________________________________________________________________________________

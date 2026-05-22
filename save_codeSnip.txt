@@ -1,22 +1,68 @@
+ def choosePath():
+     global searchDir
 
-frame_top = Frame(root)
-frame_top.grid(row=0, column=0, sticky="ew")
-###
-frame_top.columnconfigure(0, weight=0)
-frame_top.columnconfigure(1, weight=1)
-frame_top.columnconfigure(2, weight=1)
-frame_top.columnconfigure(3, weight=0)
-frame_top.rowconfigure(0, weight=0)
-###
+     while True:
+         chosenPath = input("path to search (blank = default): ")
 
-entry = Entry(frame_top)
-entry.grid(row=0, column=0, sticky="w")
+         if chosenPath == "":
+             searchDir = "Y:\Digibende\Amstelveen\Kandidaten\Programmeren\morten"
+             break
+         elif os.path.exists(chosenPath):
+             searchDir = chosenPath
+             break
+         else:
+             print("path does not exist")
+  ^ vraagt voor een pat die die in searchDir zet
+ def choosesortDir():
+     global sortDir
+     looping = True
 
-button_1 = Button(frame_top, text="select source", font=("System native", 9), command=open_searchDir)
-button_1.grid(row=0, column=1, sticky="w")
+     while looping:
+         chosenPath = input("path to store sorted folders (blank = default): ")
 
-entry2 = Entry(frame_top)
-entry2.grid(row=0, column=2, sticky="e")
+         if chosenPath == "":
+             sortDir = "Y:\Digibende\Amstelveen\Kandidaten\Programmeren\morten\sorted photos"
+             break
+         elif os.path.exists(chosenPath):
+             sortDir = chosenPath
+             break
+         elif not os.path.exists(chosenPath):
+             print("path does not exist")
+             correctInput = False
+             while correctInput == False:
+                 i = input("do you want to make it y/n: ")
+                 if i == "y":
+                     correctInput = True
+                     makedir(chosenPath)
+                     sortDir = chosenPath
+                     looping = False # needs to break out of both loops
+                 elif i == "n":
+                     correctInput = True
+                 elif i != "y" or i != "n":
+                     print("type y for yes or n for no")
 
-button_2 = Button(frame_top, text="select destination", font=("System native", 9), command=open_sortDir)
-button_2.grid(row=0, column=3, sticky="e")
+         else:
+             print("error")
+  ^ vraagt voor een pat waar die de gesoorteerde mapjes met fotos neer zet
+
+ def cli():
+     choosePath()
+     choosesortDir()
+ #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+     scanFolders(searchDir)  # roep functie aan
+    imageList.sort(key=sortFunc)  # soorteer de image list
+     allPictures = len(imageList)
+ # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+     while True:
+         userInput = input("delete dubbel images by (size and name)(1) or (byte by byte)(2): ")
+         if userInput == "1":
+             delete_dubbels()  # delete the pictures with the same name and size
+             break
+         elif userInput == "2":
+             delete_byteDubbels()
+             break
+         else:
+             print("choose an option by typing the corresponding number. eg 2")
+ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+     copieTo_folders()  # copie the fount pictures to thare sorted folder path
+     print(str(allPictures) + " images found| " + str(allPictures - len(imageList)) + " images deleted| " + str(len(imageList)) + " images sorted|")
