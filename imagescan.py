@@ -106,12 +106,15 @@ def check_fileType(path, extension):
     return False
 
 def getExif_data(path, data_type):
-    imagename = path
-    image = Image.open(imagename)
-    exifdata = image.getexif()
-    exif = { TAGS.get(tag_id, tag_id): value for tag_id, value in exifdata.items() }
-
-    return(exif.get(data_type))
+    try:
+        imagename = path
+        image = Image.open(imagename)
+        exifdata = image.getexif()
+        exif = { TAGS.get(tag_id, tag_id): value for tag_id, value in exifdata.items() }
+        return(exif.get(data_type))
+    
+    except OSError as e:
+        print(f"error in getExif_data(): {e}\nwith file: {path}")
 
 def find_date(entry):
     result = {}
@@ -139,18 +142,21 @@ def find_date(entry):
 
 
     if check_fileType(entry.path, ["jpg", "tiff", "jpeg", "heic", "heif", "hif", "heics", "heifs", "avci"]):#["jpg", "tiff", "jpeg", "heic", "heif", "hif", "heics", "heifs", "avci"]
-        if getExif_data(entry.path, "DateTime") != None:
+        if getExif_data(entry.path, "DateTime") != None: #and getExif_data(entry.path, "DateTime") != "0000:00:00 00:00:00":
             result_exif["Datetime"] = getExif_data(entry.path, "DateTime")
 
-        if getExif_data(entry.path, "DateTimeOriginal") != None:
+        if getExif_data(entry.path, "DateTimeOriginal") != None: #and getExif_data(entry.path, "DateTimeOriginal") != "0000:00:00 00:00:00":
             result_exif["DateTimeOriginal"] = getExif_data(entry.path, "DateTimeOriginal")
 
-        if getExif_data(entry.path, "DateTimeDigitized") != None:
+        if getExif_data(entry.path, "DateTimeDigitized") != None: #and getExif_data(entry.path, "DateTimeDigitized") != "0000:00:00 00:00:00":
             result_exif["DateTimeDigitized"] = getExif_data(entry.path, "DateTimeDigitized")
 
-    for methods in result_exif:
-        dt = datetime.strptime(result_exif[methods], "%Y:%m:%d %H:%M:%S")
-        result[methods] = dt
+    try:
+        for methods in result_exif:
+            dt = datetime.strptime(result_exif[methods], "%Y:%m:%d %H:%M:%S")
+            result[methods] = dt
+    except:
+        pass
     
     return min(result.values())
 
@@ -163,7 +169,10 @@ def scanFolders(startFolder, onUpdate = None): #
 
         for entry in list: # ga met entry de heele lijst (directory) langs
 
-            if entry.is_dir(): # als de entry een directory is
+            if entry.is_symlink():
+                pass
+
+            elif entry.is_dir(): # als de entry een directory is
                 scanFolders(os.path.join(startFolder, entry.name), onUpdate) #zoek dan dieper
 
             elif entry.is_file(): # als de entry een file is

@@ -64,6 +64,7 @@ def search_photos():
         messagebox.showinfo(title="file not found error", message=f"could not find directory: \n{searchDirectory}")
 
     except OSError as e:
+        print(e)
         messagebox.showerror(title="OSError", message=f"error: \n{e}")
 
     except Exception as e:
