@@ -4,14 +4,23 @@ settings:
 1 setting om sorting uit te zetten voor bepaalde cameras
 2 setting om bepaalde filetypes uit te zetten 
 3 setting om bepaalde folders te excluden 
+4 setting om bepaalde jaaren of te negeren of in een apart mapje te doen 
+5 try opening corupt files setting 
+5 delete byte dubbels checkbox
 
 functions:
+1 vedeo suport
+2 sort_photos() moet nog byte dubbels delete afhankelijk van of die setting aan staat 
 
 bugs:
-1 soms als ik voor de tweede keer een pad open en scan folders klick dan doet die het niet meer
 
 gui:
-1 add date of found pictures in listbox
+1 fix theming 
+2 add spinning thing
+3 melt het aantal gevonden fotos, deleted fotos, gesorteerde fotos
+4 melt het aantal errors in een pop up als er errors zijn (met meer info in log file)
+5 indicatie dat die aan het sorteeren is/ klaar is met sorteeren
+
 
 overige:
 1 folders scanned weet niet of dat correct is

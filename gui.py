@@ -1,6 +1,6 @@
 from tkinter import *
 from PIL import ImageTk, Image
-from tkinter import filedialog, messagebox
+from tkinter import filedialog, messagebox, Tk
 import imagescan
 
 root = Tk()
@@ -41,7 +41,12 @@ def open_sortDir():
 def display_photoNames(list):
     listbox.delete(0, END)
     for l in range(0,len(list)):
-        listbox.insert(END, list[l]["name"])
+        if len(list[l]['name']) > 23:
+            displayName = list[l]['name'][:22] + "..."
+        else:
+            displayName = list[l]['name']
+
+        listbox.insert(END, f"{displayName:<25}  {list[l]['destFolder']}")
 
 updateCounter = 0
 def doOnUpdate():
@@ -51,28 +56,44 @@ def doOnUpdate():
   label.config(text= f"scanned folders: {updateCounter}")
   root.update()
 
-def search_photos():
+def search_photos(event=None):
     global searchDirectory, updateCounter
     searchDirectory = entry.get()
     imagescan.imageList = []
     updateCounter = 0
 
-    try:
-        imagescan.scanFolders(searchDirectory, doOnUpdate)  # roep functie aan
-        imagescan.imageList.sort(key=imagescan.sortFunc)
-    except FileNotFoundError:
-        messagebox.showinfo(title="file not found error", message=f"could not find directory: \n{searchDirectory}")
+    if searchDirectory == "":
+        messagebox.showinfo(title="no path", message="no path to search")
+    else:
 
-    except OSError as e:
-        print(e)
-        messagebox.showerror(title="OSError", message=f"error: \n{e}")
+        try:
+            imagescan.scanFolders(searchDirectory, doOnUpdate)  # roep functie aan
+            imagescan.imageList.sort(key=imagescan.sortFunc)
+        except FileNotFoundError:
+            messagebox.showinfo(title="file not found error", message=f"could not find directory: \n{searchDirectory}")
 
-    except Exception as e:
-        print(f"error: {type(e)}")
-        messagebox.showerror(title="unknown error", message=f"error: \n{e}")
+        except OSError as e:
+            print(e)
+            messagebox.showerror(title="OSError", message=f"error: \n{e}")
 
-    display_photoNames(imagescan.imageList)
+        except Exception as e:
+            print(f"error: {type(e)}")
+            messagebox.showerror(title="unknown error", message=f"error: \n{e}")
 
+        display_photoNames(imagescan.imageList)
+
+def sort_photos(event=None):
+    dest = entry2.get()
+    if dest == "":
+        messagebox.showinfo(title="no path", message="no path to copie to")
+    elif imagescan.imageList == []:
+        messagebox.showinfo(title="no path", message="no pictures to sort")
+    else:
+        try:
+            imagescan.copieTo_folders(dest)
+        except Exception as e:
+            print(f"error sort photos: {type(e)}")
+            messagebox.showerror(title="unknown error", message=f"error: \n{e}")
 
 root.columnconfigure(0, weight=1)
 root.rowconfigure(0, weight=0)
@@ -92,12 +113,14 @@ frame_top.grid(row=0, column=0, sticky="ew")
 
 entry = Entry(frame_top)
 entry.pack(side=LEFT, fill=BOTH, expand=True)
+entry.bind("<Return>", search_photos)
 
 button_1 = Button(frame_top, text="select source", font=("System native", 9), command=open_searchDir)
 button_1.pack(side=LEFT, expand=False)
 
 entry2 = Entry(frame_top)
 entry2.pack(side=LEFT, fill=BOTH, expand=True)
+entry2.bind("<Return>", sort_photos)
 
 button_2 = Button(frame_top, text="select destination", font=("System native", 9), command=open_sortDir)
 button_2.pack(side=LEFT, expand=False)
@@ -114,6 +137,7 @@ frame_middle.rowconfigure(1, weight=1)
 
 listbox = Listbox(frame_middle)
 listbox.grid(row=1, column=0, sticky="nsew")
+listbox.config(font=("courier", 10))
 
 scrollBar = Scrollbar(frame_middle)
 scrollBar.grid(row=1, column=1, sticky="nsw")
@@ -132,7 +156,7 @@ frame_bottom.rowconfigure(0, weight=0)
 button_3 = Button(frame_bottom, text="search photos", font=("System native", 9), command=search_photos)
 button_3.grid(row=0, column=0, sticky="w")
 
-button_4 = Button(frame_bottom, text="button", font=("System native", 9))
+button_4 = Button(frame_bottom, text="sort photos", font=("System native", 9), command=sort_photos)
 button_4.grid(row=0, column=2, sticky="e")
 
 label = Label(frame_bottom, text= f"scanned folders: {updateCounter}", font=("System native", 9))

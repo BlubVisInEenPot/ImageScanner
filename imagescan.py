@@ -29,14 +29,15 @@ def add_sortedFolderPath(): # add the sorted folder locations to the dictionarys
     global imageList , sortDir
     for file in range(0, len(imageList)):
         date = imageList[file]["created"]
-        imageList[file]["destFolder"] = os.path.join(sortDir, date.strftime('%Y'), date.strftime('%B'))
+        imageList[file]["destFolder"] = os.path.join(date.strftime('%Y'), date.strftime('%B'))
 
-def copieTo_folders(): # copie all photos to the sorted folder locations
+def copieTo_folders(dest): # copie all photos to the sorted folder locations
     global imageList
 
     for dict in imageList:
-        makedir(dict["destFolder"])
-        shutil.copy2(dict["path"], dict["destFolder"])
+        destination = os.path.join(dest, dict["destFolder"])
+        makedir(destination)
+        shutil.copy2(dict["path"], destination)
 
 def delete_byteDubbels():
     global imageList
