@@ -95,40 +95,74 @@ def sort_photos(event=None):
             print(f"error sort photos: {type(e)}")
             messagebox.showerror(title="unknown error", message=f"error: \n{e}")
 
+deleteDubbels_setting = BooleanVar()
+deleteDubbels_setting.set(True)
+coruptFiles_setting = BooleanVar()
+coruptFiles_setting.set(False)
+settings_window = None
+
+def settingsWindow():
+    global settings_window
+
+    if settings_window is not None and settings_window.winfo_exists():
+        pass
+    else:
+        settings_window = Toplevel()
+        settings_window.title("settings")
+        settings_window.geometry("200x300")
+        checkbox = Checkbutton(settings_window, text="delete dubbels\n(byte for byte match)", variable=deleteDubbels_setting)
+        checkbox.grid(row=0, column=0, sticky="ew")
+        checkbox2 = Checkbutton(settings_window, text ="try opening corupt files\n(may result in errors)", variable=coruptFiles_setting)
+        checkbox2.grid(row=1, column=0, sticky="ew")
+
 root.columnconfigure(0, weight=1)
 root.rowconfigure(0, weight=0)
-root.rowconfigure(1, weight=1)
-root.rowconfigure(2, weight=0)
+root.rowconfigure(1, weight=0)
+root.rowconfigure(2, weight=1)
+root.rowconfigure(3, weight=0)
 
 #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 frame_top = Frame(root)
 frame_top.grid(row=0, column=0, sticky="ew")
+
+button_settings = Button(frame_top, text="⚙️", font=("System native", 9), command=settingsWindow)
+button_settings.pack(side=RIGHT, fill=BOTH, expand=False)
+
+
+
+
+
+
+
+#- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+frame_middle_top = Frame(root)
+frame_middle_top.grid(row=1, column=0, sticky="ew")
 ###
-# frame_top.columnconfigure(0, weight=0)
-# frame_top.columnconfigure(1, weight=1)
-# frame_top.columnconfigure(2, weight=1)
-# frame_top.columnconfigure(3, weight=0)
-# frame_top.rowconfigure(0, weight=0)
+# frame_middle_top.columnconfigure(0, weight=0)
+# frame_middle_top.columnconfigure(1, weight=1)
+# frame_middle_top.columnconfigure(2, weight=1)
+# frame_middle_top.columnconfigure(3, weight=0)
+# frame_middle_top.rowconfigure(0, weight=0)
 ###
 
-entry = Entry(frame_top)
+entry = Entry(frame_middle_top)
 entry.pack(side=LEFT, fill=BOTH, expand=True)
 entry.bind("<Return>", search_photos)
 
-button_1 = Button(frame_top, text="select source", font=("System native", 9), command=open_searchDir)
+button_1 = Button(frame_middle_top, text="select source", font=("System native", 9), command=open_searchDir)
 button_1.pack(side=LEFT, expand=False)
 
-entry2 = Entry(frame_top)
+entry2 = Entry(frame_middle_top)
 entry2.pack(side=LEFT, fill=BOTH, expand=True)
 entry2.bind("<Return>", sort_photos)
 
-button_2 = Button(frame_top, text="select destination", font=("System native", 9), command=open_sortDir)
+button_2 = Button(frame_middle_top, text="select destination", font=("System native", 9), command=open_sortDir)
 button_2.pack(side=LEFT, expand=False)
 
 
 #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 frame_middle = Frame(root)
-frame_middle.grid(row=1, column=0, sticky="nsew")
+frame_middle.grid(row=2, column=0, sticky="nsew")
 ###
 frame_middle.columnconfigure(0, weight=1)
 frame_middle.columnconfigure(1, weight=1)
@@ -145,7 +179,7 @@ scrollBar.config( command = listbox.yview)
 
 #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 frame_bottom = Frame(root)
-frame_bottom.grid(row=2, column=0, sticky="ew") #, columnspan=2, sticky="ew")
+frame_bottom.grid(row=3, column=0, sticky="ew") #, columnspan=2, sticky="ew")
 ###
 frame_bottom.columnconfigure(0, weight=1)
 frame_bottom.columnconfigure(1, weight=1)

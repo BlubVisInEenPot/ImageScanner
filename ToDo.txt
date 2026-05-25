@@ -1,28 +1,29 @@
 TO DO:
 
 settings:
-1 setting om sorting uit te zetten voor bepaalde cameras
-2 setting om bepaalde filetypes uit te zetten 
-3 setting om bepaalde folders te excluden 
-4 setting om bepaalde jaaren of te negeren of in een apart mapje te doen 
-5 try opening corupt files setting 
-5 delete byte dubbels checkbox
+- optie om sorting uit te zetten voor bepaalde cameras
+- optie om bepaalde filetypes uit te zetten 
+- optie om bepaalde folders te excluden 
+- optie om bepaalde jaaren of te negeren of in een apart mapje te doen 
+- try opening corupt files setting 
+- delete byte dubbels checkbox
+- optie om te sorteeren op alleen jaar of jaar en maant 
 
 functions:
-1 vedeo suport
-2 sort_photos() moet nog byte dubbels delete afhankelijk van of die setting aan staat 
+- vedeo suport
+- sort_photos() moet nog byte dubbels deleten. afhankelijk van of die setting aan staat 
 
 bugs:
 
 gui:
-1 fix theming 
-2 add spinning thing
-3 melt het aantal gevonden fotos, deleted fotos, gesorteerde fotos
-4 melt het aantal errors in een pop up als er errors zijn (met meer info in log file)
-5 indicatie dat die aan het sorteeren is/ klaar is met sorteeren
+- fix theming 
+- add spinning thing
+- melt het aantal gevonden fotos, deleted fotos, gesorteerde fotos
+- melt het aantal errors in een pop up als er errors zijn (met meer info in log file)
+- indicatie dat die aan het sorteeren is/ klaar is met sorteeren
 
 
 overige:
-1 folders scanned weet niet of dat correct is
-2 ongebruikte functies delete
-3 log file for errors inplaats van printen
+- folders scanned weet niet of dat correct is
+- ongebruikte functies delete
+- log file for errors inplaats van printen
