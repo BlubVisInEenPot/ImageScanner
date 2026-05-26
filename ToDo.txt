@@ -11,9 +11,10 @@ settings:
 
 functions:
 - vedeo suport
-- sort_photos() moet nog byte dubbels deleten. afhankelijk van of die setting aan staat 
 
 bugs:
+- maanden mappen en jaaren mappen worden niet op de juiste volgworden aangemaakt dus staan niet netjes in file explorer vooral maanden
+- fix aplication freezing when sorting (multithreading ?)
 
 gui:
 - fix theming 
@@ -22,8 +23,8 @@ gui:
 - melt het aantal errors in een pop up als er errors zijn (met meer info in log file)
 - indicatie dat die aan het sorteeren is/ klaar is met sorteeren
 
-
 overige:
 - folders scanned weet niet of dat correct is
 - ongebruikte functies delete
 - log file for errors inplaats van printen
+- verander de datum file explorer (windows) finder etc (unix) uses to sort pictures by date to correct one

@@ -1,13 +1,14 @@
 import os
 import shutil
 import tkinter as tk
-from PIL import ImageTk, Image
+from PIL import ImageTk, Image, ImageFile
 from PIL.ExifTags import TAGS
 from pillow_heif import register_heif_opener
 from  datetime import *
 import filetype
 
 register_heif_opener()
+ImageFile.LOAD_TRUNCATED_IMAGES = False
 
 imageList = []
 searchDir = ""

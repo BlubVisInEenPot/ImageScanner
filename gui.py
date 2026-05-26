@@ -8,8 +8,15 @@ root = Tk()
 root.geometry("600x300")
 root.minsize(550, 150)
 root.title("image sorter")
+root.iconbitmap("icon.ico")
 
 searchDirectory = r"C:\Users\morten.goudswaard\Downloads"
+
+deleteDubbels_setting = BooleanVar()
+deleteDubbels_setting.set(True)
+coruptFiles_setting = BooleanVar()
+coruptFiles_setting.set(False)
+settings_window = None
 
 def openfilename():
 
@@ -84,22 +91,21 @@ def search_photos(event=None):
 
 def sort_photos(event=None):
     dest = entry2.get()
+
     if dest == "":
         messagebox.showinfo(title="no path", message="no path to copie to")
     elif imagescan.imageList == []:
         messagebox.showinfo(title="no path", message="no pictures to sort")
     else:
         try:
-            imagescan.copieTo_folders(dest)
+            if deleteDubbels_setting.get() == True:
+                imagescan.delete_byteDubbels()
+                imagescan.copieTo_folders(dest)
+            else:
+                imagescan.copieTo_folders(dest)
         except Exception as e:
             print(f"error sort photos: {type(e)}")
             messagebox.showerror(title="unknown error", message=f"error: \n{e}")
-
-deleteDubbels_setting = BooleanVar()
-deleteDubbels_setting.set(True)
-coruptFiles_setting = BooleanVar()
-coruptFiles_setting.set(False)
-settings_window = None
 
 def settingsWindow():
     global settings_window
@@ -110,10 +116,15 @@ def settingsWindow():
         settings_window = Toplevel()
         settings_window.title("settings")
         settings_window.geometry("200x300")
-        checkbox = Checkbutton(settings_window, text="delete dubbels\n(byte for byte match)", variable=deleteDubbels_setting)
+        settings_window.iconbitmap("icon2.ico")
+        checkbox = Checkbutton(settings_window, text="delete dubbels\n  (byte for byte match)  ", variable=deleteDubbels_setting)
         checkbox.grid(row=0, column=0, sticky="ew")
-        checkbox2 = Checkbutton(settings_window, text ="try opening corupt files\n(may result in errors)", variable=coruptFiles_setting)
+        checkbox2 = Checkbutton(settings_window, text ="try opening corupt files\n(may result in errors)", command=on_setting_change, variable=coruptFiles_setting)
         checkbox2.grid(row=1, column=0, sticky="ew")
+
+def on_setting_change():
+    imagescan.ImageFile.LOAD_TRUNCATED_IMAGES = coruptFiles_setting.get()
+    print(imagescan.ImageFile.LOAD_TRUNCATED_IMAGES)
 
 root.columnconfigure(0, weight=1)
 root.rowconfigure(0, weight=0)
@@ -125,7 +136,7 @@ root.rowconfigure(3, weight=0)
 frame_top = Frame(root)
 frame_top.grid(row=0, column=0, sticky="ew")
 
-button_settings = Button(frame_top, text="⚙️", font=("System native", 9), command=settingsWindow)
+button_settings = Button(frame_top, text="⚙️", command=settingsWindow)
 button_settings.pack(side=RIGHT, fill=BOTH, expand=False)
 
 
