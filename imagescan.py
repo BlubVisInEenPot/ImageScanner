@@ -162,8 +162,9 @@ def find_date(entry):
     
     return min(result.values())
 
-def scanFolders(startFolder, onUpdate = None): #
-    global imageList
+dirs_scanned = 0
+def scanFolders(startFolder): #
+    global imageList, dirs_scanned
     bestandData = {} # maak lege dict aan
 
     try:
@@ -175,7 +176,9 @@ def scanFolders(startFolder, onUpdate = None): #
                 pass
 
             elif entry.is_dir(): # als de entry een directory is
-                scanFolders(os.path.join(startFolder, entry.name), onUpdate) #zoek dan dieper
+                scanFolders(os.path.join(startFolder, entry.name)) #zoek dan dieper
+                dirs_scanned += 1
+                print(dirs_scanned)
 
             elif entry.is_file(): # als de entry een file is
                 if check_fileType(entry.path, "picture"):
@@ -185,8 +188,7 @@ def scanFolders(startFolder, onUpdate = None): #
 
         add_sortedFolderPath()
         list.close()
-        if onUpdate is not None:
-            onUpdate()
+
     except PermissionError:
         print("permision error")
         pass

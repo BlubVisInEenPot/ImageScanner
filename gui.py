@@ -2,13 +2,14 @@ from tkinter import *
 from PIL import ImageTk, Image
 from tkinter import filedialog, messagebox, Tk
 import imagescan
+from threading import Thread
 
 root = Tk()
 
 root.geometry("600x300")
 root.minsize(550, 150)
 root.title("image sorter")
-root.iconbitmap("icon.ico")
+# root.iconbitmap("icon.ico")
 
 searchDirectory = r"C:\Users\morten.goudswaard\Downloads"
 
@@ -55,16 +56,16 @@ def display_photoNames(list):
 
         listbox.insert(END, f"{displayName:<25}  {list[l]['destFolder']}")
 
-updateCounter = 0
-def doOnUpdate():
-  global root, updateCounter
-  updateCounter += 1
-  # print(str(updateCounter)+ " folders scanned")
-  label.config(text= f"scanned folders: {updateCounter}")
-  root.update()
+# updateCounter = 0
+# def doOnUpdate():
+#   global root, updateCounter
+#   updateCounter += 1
+#   # print(str(updateCounter)+ " folders scanned")
+#   label.config(text= f"scanned folders: {updateCounter}")
+#   root.update()
 
 def search_photos(event=None):
-    global searchDirectory, updateCounter
+    global searchDirectory, updateCounter, running
     searchDirectory = entry.get()
     imagescan.imageList = []
     updateCounter = 0
@@ -74,7 +75,7 @@ def search_photos(event=None):
     else:
 
         try:
-            imagescan.scanFolders(searchDirectory, doOnUpdate)  # roep functie aan
+            imagescan.scanFolders(searchDirectory)  # roep functie aan
             imagescan.imageList.sort(key=imagescan.sortFunc)
         except FileNotFoundError:
             messagebox.showinfo(title="file not found error", message=f"could not find directory: \n{searchDirectory}")
@@ -116,7 +117,7 @@ def settingsWindow():
         settings_window = Toplevel()
         settings_window.title("settings")
         settings_window.geometry("200x300")
-        settings_window.iconbitmap("icon2.ico")
+        # settings_window.iconbitmap("icon2.ico")
         checkbox = Checkbutton(settings_window, text="delete dubbels\n  (byte for byte match)  ", variable=deleteDubbels_setting)
         checkbox.grid(row=0, column=0, sticky="ew")
         checkbox2 = Checkbutton(settings_window, text ="try opening corupt files\n(may result in errors)", command=on_setting_change, variable=coruptFiles_setting)
@@ -125,6 +126,27 @@ def settingsWindow():
 def on_setting_change():
     imagescan.ImageFile.LOAD_TRUNCATED_IMAGES = coruptFiles_setting.get()
     print(imagescan.ImageFile.LOAD_TRUNCATED_IMAGES)
+
+t1 = None
+
+def run(function):
+    global t1
+    if check_t1():
+        pass
+        print("pass")
+    else:
+        t1 = Thread(target=function, daemon=True)
+        t1.start()
+
+def check_t1():
+    global t1
+    if t1 == None or t1.is_alive() == False:
+        return False
+    else:
+        return True
+
+
+
 
 root.columnconfigure(0, weight=1)
 root.rowconfigure(0, weight=0)
@@ -138,12 +160,6 @@ frame_top.grid(row=0, column=0, sticky="ew")
 
 button_settings = Button(frame_top, text="⚙️", command=settingsWindow)
 button_settings.pack(side=RIGHT, fill=BOTH, expand=False)
-
-
-
-
-
-
 
 #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 frame_middle_top = Frame(root)
@@ -198,14 +214,14 @@ frame_bottom.columnconfigure(2, weight=1)
 frame_bottom.rowconfigure(0, weight=0)
 ###
 
-button_3 = Button(frame_bottom, text="search photos", font=("System native", 9), command=search_photos)
+button_3 = Button(frame_bottom, text="search photos", font=("System native", 9), command=lambda: run(search_photos))#search_photos
 button_3.grid(row=0, column=0, sticky="w")
 
-button_4 = Button(frame_bottom, text="sort photos", font=("System native", 9), command=sort_photos)
+button_4 = Button(frame_bottom, text="sort photos", font=("System native", 9), command=lambda: run(sort_photos))#sort_photos
 button_4.grid(row=0, column=2, sticky="e")
 
-label = Label(frame_bottom, text= f"scanned folders: {updateCounter}", font=("System native", 9))
-label.grid(row=0, column=1)
+# label = Label(frame_bottom, text="", font=("System native", 9))
+# label.grid(row=0, column=1)
 
 #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
