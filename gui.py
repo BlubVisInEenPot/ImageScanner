@@ -56,26 +56,39 @@ def display_photoNames(list):
 
         listbox.insert(END, f"{displayName:<25}  {list[l]['destFolder']}")
 
-# updateCounter = 0
-# def doOnUpdate():
-#   global root, updateCounter
-#   updateCounter += 1
-#   # print(str(updateCounter)+ " folders scanned")
-#   label.config(text= f"scanned folders: {updateCounter}")
-#   root.update()
+def update_folder_label(count):
+    current_value = label.cget("text")
+    if count == "done":
+        root.after_idle(lambda: label.config(text=str(current_value) + ", done"))
+    else:
+        root.after_idle(lambda: label.config(text=f"scanned folders: {count}"))
+
+def update_sorting_label(is_running):
+    # If is_running is True, show "Sorting...", otherwise show "Done!" (or clear it)
+    if is_running == "clear":
+        status_text = ""
+    elif is_running == True:
+        status_text = "Sorting..." 
+    else:
+        status_text = "Done!"
+    
+    root.after_idle(lambda: label_2.config(text=status_text))
 
 def search_photos(event=None):
-    global searchDirectory, updateCounter, running
+    global searchDirectory
     searchDirectory = entry.get()
     imagescan.imageList = []
-    updateCounter = 0
+
+    update_sorting_label("clear")
+    imagescan.dirs_scanned = 0
+    update_folder_label(0)
 
     if searchDirectory == "":
         messagebox.showinfo(title="no path", message="no path to search")
     else:
 
         try:
-            imagescan.scanFolders(searchDirectory)  # roep functie aan
+            imagescan.scanFolders(searchDirectory, callback=update_folder_label)  # roep functie aan
             imagescan.imageList.sort(key=imagescan.sortFunc)
         except FileNotFoundError:
             messagebox.showinfo(title="file not found error", message=f"could not find directory: \n{searchDirectory}")
@@ -89,6 +102,8 @@ def search_photos(event=None):
             messagebox.showerror(title="unknown error", message=f"error: \n{e}")
 
         display_photoNames(imagescan.imageList)
+    
+    update_folder_label("done")
 
 def sort_photos(event=None):
     dest = entry2.get()
@@ -99,14 +114,16 @@ def sort_photos(event=None):
         messagebox.showinfo(title="no path", message="no pictures to sort")
     else:
         try:
+            update_sorting_label(True)
+
             if deleteDubbels_setting.get() == True:
                 imagescan.delete_byteDubbels()
-                imagescan.copieTo_folders(dest)
-            else:
-                imagescan.copieTo_folders(dest)
+
+            imagescan.copieTo_folders(dest, callback=update_sorting_label)
         except Exception as e:
             print(f"error sort photos: {type(e)}")
             messagebox.showerror(title="unknown error", message=f"error: \n{e}")
+            update_sorting_label(False)
 
 def settingsWindow():
     global settings_window
@@ -211,6 +228,7 @@ frame_bottom.grid(row=3, column=0, sticky="ew") #, columnspan=2, sticky="ew")
 frame_bottom.columnconfigure(0, weight=1)
 frame_bottom.columnconfigure(1, weight=1)
 frame_bottom.columnconfigure(2, weight=1)
+frame_bottom.columnconfigure(3, weight=1)
 frame_bottom.rowconfigure(0, weight=0)
 ###
 
@@ -218,10 +236,13 @@ button_3 = Button(frame_bottom, text="search photos", font=("System native", 9),
 button_3.grid(row=0, column=0, sticky="w")
 
 button_4 = Button(frame_bottom, text="sort photos", font=("System native", 9), command=lambda: run(sort_photos))#sort_photos
-button_4.grid(row=0, column=2, sticky="e")
+button_4.grid(row=0, column=3, sticky="e")
 
-# label = Label(frame_bottom, text="", font=("System native", 9))
-# label.grid(row=0, column=1)
+label = Label(frame_bottom, text="scanned folders: 0", font=("System native", 9))
+label.grid(row=0, column=1)
+
+label_2 = Label(frame_bottom, text="", font=("System native", 9))
+label_2.grid(row=0, column=2)
 
 #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 

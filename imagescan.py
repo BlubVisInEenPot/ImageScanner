@@ -32,13 +32,18 @@ def add_sortedFolderPath(): # add the sorted folder locations to the dictionarys
         date = imageList[file]["created"]
         imageList[file]["destFolder"] = os.path.join(date.strftime('%Y'), date.strftime('%B'))
 
-def copieTo_folders(dest): # copie all photos to the sorted folder locations
-    global imageList
+
+def copieTo_folders(dest, callback=None): # copie all photos to the sorted folder locations
+    global imageList, running
 
     for dict in imageList:
         destination = os.path.join(dest, dict["destFolder"])
         makedir(destination)
         shutil.copy2(dict["path"], destination)
+
+    
+    if callback:
+        callback(False)
 
 def delete_byteDubbels():
     global imageList
@@ -163,22 +168,25 @@ def find_date(entry):
     return min(result.values())
 
 dirs_scanned = 0
-def scanFolders(startFolder): #
+def scanFolders(startFolder, callback=None): #
     global imageList, dirs_scanned
     bestandData = {} # maak lege dict aan
 
     try:
         list = os.scandir(startFolder) # list = start directory
-
         for entry in list: # ga met entry de heele lijst (directory) langs
 
             if entry.is_symlink():
                 pass
 
             elif entry.is_dir(): # als de entry een directory is
-                scanFolders(os.path.join(startFolder, entry.name)) #zoek dan dieper
                 dirs_scanned += 1
-                print(dirs_scanned)
+
+                if callback:
+                    callback(dirs_scanned)
+
+                scanFolders(os.path.join(startFolder, entry.name), callback=callback) #zoek dan dieper
+                
 
             elif entry.is_file(): # als de entry een file is
                 if check_fileType(entry.path, "picture"):
