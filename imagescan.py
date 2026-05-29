@@ -60,9 +60,7 @@ def delete_byteDubbels():
         filePath2 = imageList[counter + 1]["path"]
 
         try:
-            print(f'byte comparing {filePath1}')
             with open(filePath1, "rb") as file1:
-                print(f'and {filePath2}')
                 with open(filePath2, "rb") as file2:
                     while True:
                         bytes1 = file1.read(buffersize)

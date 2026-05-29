@@ -5,8 +5,6 @@ settings:
 - optie om bepaalde filetypes uit te zetten 
 - optie om bepaalde folders te excluden 
 - optie om bepaalde jaaren of te negeren of in een apart mapje te doen 
-- try opening corupt files setting 
-- delete byte dubbels checkbox
 - optie om te sorteeren op alleen jaar of jaar en maant 
 
 functions:
@@ -22,7 +20,6 @@ gui:
 - melt het aantal errors in een pop up als er errors zijn (met meer info in log file)
 
 overige:
-- ongebruikte functies delete
 - log file for errors inplaats van printen
 - verander de datum file explorer (windows) finder etc (unix) uses to sort pictures by date to correct one
 - fix probleem waar je een incorecte datum kan hebben zoals 01.01.1970 

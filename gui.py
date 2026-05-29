@@ -64,13 +64,13 @@ def update_folder_label(count):
         root.after_idle(lambda: label.config(text=f"scanned folders: {count}"))
 
 def update_sorting_label(is_running):
-    # If is_running is True, show "Sorting...", otherwise show "Done!" (or clear it)
+    # If is_running is True, show "Sorting...", otherwise show "done" (or clear it)
     if is_running == "clear":
         status_text = ""
     elif is_running == True:
         status_text = "Sorting..." 
     else:
-        status_text = "Done!"
+        status_text = "done"
     
     root.after_idle(lambda: label_2.config(text=status_text))
 
