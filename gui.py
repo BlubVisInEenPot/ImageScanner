@@ -1,15 +1,17 @@
 from tkinter import *
 from PIL import ImageTk, Image
-from tkinter import filedialog, messagebox, Tk
+from tkinter import filedialog, messagebox, Tk, ttk
 import imagescan
 from threading import Thread
+
 
 root = Tk()
 
 root.geometry("600x300")
-root.minsize(550, 150)
+root.minsize(550, 200)
 root.title("image sorter")
 # root.iconbitmap("icon.ico")
+
 
 searchDirectory = r"C:\Users\morten.goudswaard\Downloads"
 
@@ -46,15 +48,26 @@ def open_sortDir():
     if filepath:
         entry2.insert(END, filepath)
 
-def display_photoNames(list):
-    listbox.delete(0, END)
-    for l in range(0,len(list)):
-        if len(list[l]['name']) > 23:
-            displayName = list[l]['name'][:22] + "..."
-        else:
-            displayName = list[l]['name']
+# def display_photoNames(list): # inset name and destFolder into listbox
+#     listbox.delete(0, END)      #empty the listbox
 
-        listbox.insert(END, f"{displayName:<25}  {list[l]['destFolder']}")
+#     for l in range(0,len(list)):
+#         if len(list[l]['name']) > 23:
+#             displayName = list[l]['name'][:22] + "..."
+#         else:
+#             displayName = list[l]['name']
+
+#         listbox.insert(END, f"{displayName:<25}  {list[l]['destFolder']}")
+
+
+def display_photoNames(list):
+    #delete items in treeview
+    treeview.delete(*treeview.get_children())
+    for item in treeview.get_children():
+        treeview.delete(item)
+    #add items from list in treeview(name, date)
+    for index, item in enumerate(list):
+        treeview.insert("", END, text=item["name"], values=(item["destFolder"]))
 
 def update_folder_label(count):
     current_value = label.cget("text")
@@ -102,7 +115,7 @@ def search_photos(event=None):
             messagebox.showerror(title="unknown error", message=f"error: \n{e}")
 
         display_photoNames(imagescan.imageList)
-    
+
     update_folder_label("done")
 
 def sort_photos(event=None):
@@ -135,9 +148,9 @@ def settingsWindow():
         settings_window.title("settings")
         settings_window.geometry("200x300")
         # settings_window.iconbitmap("icon2.ico")
-        checkbox = Checkbutton(settings_window, text="delete dubbels\n  (byte for byte match)  ", variable=deleteDubbels_setting)
+        checkbox = ttk.Checkbutton(settings_window, text="delete dubbels\n  (byte for byte match)  ", variable=deleteDubbels_setting)
         checkbox.grid(row=0, column=0, sticky="ew")
-        checkbox2 = Checkbutton(settings_window, text ="try opening corupt files\n(may result in errors)", command=on_setting_change, variable=coruptFiles_setting)
+        checkbox2 = ttk.Checkbutton(settings_window, text ="try opening corupt files\n(may result in errors)", command=on_setting_change, variable=coruptFiles_setting)
         checkbox2.grid(row=1, column=0, sticky="ew")
 
 def on_setting_change():
@@ -172,57 +185,64 @@ root.rowconfigure(2, weight=1)
 root.rowconfigure(3, weight=0)
 
 #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-frame_top = Frame(root)
+frame_top = ttk.Frame(root)
 frame_top.grid(row=0, column=0, sticky="ew")
 
-button_settings = Button(frame_top, text="⚙️", command=settingsWindow)
+button_settings = ttk.Button(frame_top, text="⚙️", command=settingsWindow)
 button_settings.pack(side=RIGHT, fill=BOTH, expand=False)
 
 #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-frame_middle_top = Frame(root)
+frame_middle_top = ttk.Frame(root)
 frame_middle_top.grid(row=1, column=0, sticky="ew")
-###
-# frame_middle_top.columnconfigure(0, weight=0)
-# frame_middle_top.columnconfigure(1, weight=1)
-# frame_middle_top.columnconfigure(2, weight=1)
-# frame_middle_top.columnconfigure(3, weight=0)
-# frame_middle_top.rowconfigure(0, weight=0)
-###
 
-entry = Entry(frame_middle_top)
+entry = ttk.Entry(frame_middle_top)
 entry.pack(side=LEFT, fill=BOTH, expand=True)
 entry.bind("<Return>", search_photos)
 
-button_1 = Button(frame_middle_top, text="select source", font=("System native", 9), command=open_searchDir)
+button_1 = ttk.Button(frame_middle_top, text="select source", command=open_searchDir)
 button_1.pack(side=LEFT, expand=False)
 
-entry2 = Entry(frame_middle_top)
+entry2 = ttk.Entry(frame_middle_top)
 entry2.pack(side=LEFT, fill=BOTH, expand=True)
 entry2.bind("<Return>", sort_photos)
 
-button_2 = Button(frame_middle_top, text="select destination", font=("System native", 9), command=open_sortDir)
+button_2 = ttk.Button(frame_middle_top, text="select destination", command=open_sortDir)
 button_2.pack(side=LEFT, expand=False)
 
 
 #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-frame_middle = Frame(root)
+frame_middle = ttk.Frame(root)
 frame_middle.grid(row=2, column=0, sticky="nsew")
 ###
-frame_middle.columnconfigure(0, weight=1)
-frame_middle.columnconfigure(1, weight=1)
-frame_middle.rowconfigure(1, weight=1)
+# frame_middle.columnconfigure(0, weight=1)
+# frame_middle.columnconfigure(1, weight=1)
+# frame_middle.rowconfigure(1, weight=1)
 ###
 
-listbox = Listbox(frame_middle)
-listbox.grid(row=1, column=0, sticky="nsew")
-listbox.config(font=("courier", 10))
+treeview = ttk.Treeview(frame_middle, columns=("test"))
 
-scrollBar = Scrollbar(frame_middle)
-scrollBar.grid(row=1, column=1, sticky="nsw")
-scrollBar.config( command = listbox.yview)
+treeview.column("#0", width=400)
+treeview.column("#1", stretch=False)
+
+treeview.heading("#0", text="name")
+treeview.heading("#1", text="date")
+
+scrollbar = ttk.Scrollbar(frame_middle, orient=VERTICAL, command=treeview.yview)
+treeview.configure(yscrollcommand=scrollbar.set)
+
+scrollbar.pack(side=RIGHT, expand=False, fill=BOTH)
+treeview.pack(side=RIGHT, expand=True, fill=BOTH)
+
+# listbox = Listbox(frame_middle)
+# listbox.grid(row=1, column=0, sticky="nsew")
+# listbox.config(font=("courier", 10))
+
+# scrollBar = Scrollbar(frame_middle)
+# scrollBar.grid(row=1, column=1, sticky="nsw")
+# scrollBar.config( command = listbox.yview)
 
 #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-frame_bottom = Frame(root)
+frame_bottom = ttk.Frame(root)
 frame_bottom.grid(row=3, column=0, sticky="ew") #, columnspan=2, sticky="ew")
 ###
 frame_bottom.columnconfigure(0, weight=1)
@@ -232,16 +252,16 @@ frame_bottom.columnconfigure(3, weight=1)
 frame_bottom.rowconfigure(0, weight=0)
 ###
 
-button_3 = Button(frame_bottom, text="search photos", font=("System native", 9), command=lambda: run(search_photos))#search_photos
+button_3 = ttk.Button(frame_bottom, text="search photos", command=lambda: run(search_photos))
 button_3.grid(row=0, column=0, sticky="w")
 
-button_4 = Button(frame_bottom, text="sort photos", font=("System native", 9), command=lambda: run(sort_photos))#sort_photos
+button_4 = ttk.Button(frame_bottom, text="sort photos", command=lambda: run(sort_photos))
 button_4.grid(row=0, column=3, sticky="e")
 
-label = Label(frame_bottom, text="scanned folders: 0", font=("System native", 9))
+label = ttk.Label(frame_bottom, text="scanned folders: 0")
 label.grid(row=0, column=1)
 
-label_2 = Label(frame_bottom, text="", font=("System native", 9))
+label_2 = ttk.Label(frame_bottom, text="")
 label_2.grid(row=0, column=2)
 
 #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
