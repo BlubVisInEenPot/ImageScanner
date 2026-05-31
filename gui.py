@@ -48,18 +48,6 @@ def open_sortDir():
     if filepath:
         entry2.insert(END, filepath)
 
-# def display_photoNames(list): # inset name and destFolder into listbox
-#     listbox.delete(0, END)      #empty the listbox
-
-#     for l in range(0,len(list)):
-#         if len(list[l]['name']) > 23:
-#             displayName = list[l]['name'][:22] + "..."
-#         else:
-#             displayName = list[l]['name']
-
-#         listbox.insert(END, f"{displayName:<25}  {list[l]['destFolder']}")
-
-
 def display_photoNames(list):
     #delete items in treeview
     treeview.delete(*treeview.get_children())
@@ -67,14 +55,19 @@ def display_photoNames(list):
         treeview.delete(item)
     #add items from list in treeview(name, date)
     for index, item in enumerate(list):
-        treeview.insert("", END, text=item["name"], values=(item["destFolder"]))
-
+        treeview.insert("", END, text=index, values=(item["name"], item["destFolder"]))
+    
+previous_value = 0
 def update_folder_label(count):
-    current_value = label.cget("text")
+    global previous_value
+
+    if not count == "done":
+        previous_value = count
+
     if count == "done":
-        root.after_idle(lambda: label.config(text=str(current_value) + ", done"))
+        root.after_idle(lambda: label.config(text=f"scanned folders: {previous_value} done"))
     else:
-        root.after_idle(lambda: label.config(text=f"scanned folders: {count}"))
+        root.after_idle(lambda: label.config(text=f"scanned folders: {count} running..."))
 
 def update_sorting_label(is_running):
     # If is_running is True, show "Sorting...", otherwise show "done" (or clear it)
@@ -213,33 +206,22 @@ button_2.pack(side=LEFT, expand=False)
 #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 frame_middle = ttk.Frame(root)
 frame_middle.grid(row=2, column=0, sticky="nsew")
-###
-# frame_middle.columnconfigure(0, weight=1)
-# frame_middle.columnconfigure(1, weight=1)
-# frame_middle.rowconfigure(1, weight=1)
-###
 
-treeview = ttk.Treeview(frame_middle, columns=("test"))
+treeview = ttk.Treeview(frame_middle, columns=("test", "test2"))
 
-treeview.column("#0", width=400)
-treeview.column("#1", stretch=False)
+treeview.column("#0", width=70, stretch=False)
+treeview.column("#1", width=380)
+treeview.column("#2", width=130, stretch=False)
 
-treeview.heading("#0", text="name")
-treeview.heading("#1", text="date")
+treeview.heading("#0", text="num")
+treeview.heading("#1", text="name")
+treeview.heading("#2", text="date")
 
 scrollbar = ttk.Scrollbar(frame_middle, orient=VERTICAL, command=treeview.yview)
 treeview.configure(yscrollcommand=scrollbar.set)
 
 scrollbar.pack(side=RIGHT, expand=False, fill=BOTH)
 treeview.pack(side=RIGHT, expand=True, fill=BOTH)
-
-# listbox = Listbox(frame_middle)
-# listbox.grid(row=1, column=0, sticky="nsew")
-# listbox.config(font=("courier", 10))
-
-# scrollBar = Scrollbar(frame_middle)
-# scrollBar.grid(row=1, column=1, sticky="nsw")
-# scrollBar.config( command = listbox.yview)
 
 #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 frame_bottom = ttk.Frame(root)

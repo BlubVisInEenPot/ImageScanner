@@ -17,7 +17,6 @@ gui:
 - add spinning thing
 - melt het aantal gevonden fotos, deleted fotos, gesorteerde fotos
 - melt het aantal errors in een pop up als er errors zijn (met meer info in log file)
-- done takes realy long time after new treeview function
 
 overige:
 - log file for errors inplaats van printen
