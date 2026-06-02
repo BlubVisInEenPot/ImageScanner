@@ -10,7 +10,7 @@ root = Tk()
 root.geometry("600x300")
 root.minsize(550, 200)
 root.title("image sorter")
-# root.iconbitmap("icon.ico")
+root.iconbitmap("icon.ico")
 
 
 searchDirectory = r"C:\Users\morten.goudswaard\Downloads"
@@ -140,7 +140,7 @@ def settingsWindow():
         settings_window = Toplevel()
         settings_window.title("settings")
         settings_window.geometry("200x300")
-        # settings_window.iconbitmap("icon2.ico")
+        settings_window.iconbitmap("icon2.ico")
         checkbox = ttk.Checkbutton(settings_window, text="delete dubbels\n  (byte for byte match)  ", variable=deleteDubbels_setting)
         checkbox.grid(row=0, column=0, sticky="ew")
         checkbox2 = ttk.Checkbutton(settings_window, text ="try opening corupt files\n(may result in errors)", command=on_setting_change, variable=coruptFiles_setting)
