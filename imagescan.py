@@ -14,6 +14,13 @@ imageList = []
 searchDir = ""
 sortDir = ""
 
+def clear_log():
+    with open("errors.txt", "wt") as f:
+        f.write("")
+
+def log_errors(exeption):
+    with open("errors.txt", "at") as f:
+        f.write(f"- {exeption}\n\n")
 
 def makedir(i): # make the directories
     try:
@@ -22,8 +29,10 @@ def makedir(i): # make the directories
         pass
     except PermissionError:
         print("permision denied")
+        log_errors(f"makedir(): prmision denied")
     except Exception as e:
         print(f"An error occurred: {e}")
+        log_errors(f"makedir(): {e}")
     #os.path.exists(i):
 
 def add_sortedFolderPath(): # add the sorted folder locations to the dictionarys
@@ -52,8 +61,8 @@ def delete_byteDubbels():
     counter = 0
 
     if not len(imageList) > 0:
-        print("no imeges in list (def delete_byteDubbels)")
-
+        # print("no imeges in list (def delete_byteDubbels)")
+        pass
     while counter + 1 < len(imageList):
 
         filePath1 = imageList[counter]["path"]
@@ -74,22 +83,23 @@ def delete_byteDubbels():
                             imageList.pop(counter)
                             break
         except  Exception as e:
-            print('File error: ', e)
+            print(f"File error: , {e}")
+            log_errors(f"delete_byteDubbels(): {e}")
 
-def delete_dubbels():
-    global imageList
-
-    if len(imageList) > 0: # als de lengte van imageList groter is dan 0
-        vorige = imageList[0] # maak een variable aan vorige = het eerste ding in imageList
-    else:
-        print("empty list") # print anders empty list
-    huidige = 1 # maak een variable aan huidig is 1
-    while huidige < len(imageList): # als huidig(1) klijner is dan de lengte van imagelist loop
-        if imageList[huidige]["name"] == vorige["name"] and imageList[huidige]["size"] == vorige["size"]: # als de naam van de huidige gelijk is als de naam van de vorige en de size
-            imageList.pop(huidige) #
-        else:
-            vorige = imageList[huidige]
-            huidige += 1
+# def delete_dubbels():
+#     global imageList
+#
+#     if len(imageList) > 0: # als de lengte van imageList groter is dan 0
+#         vorige = imageList[0] # maak een variable aan vorige = het eerste ding in imageList
+#     else:
+#         print("empty list") # print anders empty list
+#     huidige = 1 # maak een variable aan huidig is 1
+#     while huidige < len(imageList): # als huidig(1) klijner is dan de lengte van imagelist loop
+#         if imageList[huidige]["name"] == vorige["name"] and imageList[huidige]["size"] == vorige["size"]: # als de naam van de huidige gelijk is als de naam van de vorige en de size
+#             imageList.pop(huidige) #
+#         else:
+#             vorige = imageList[huidige]
+#             huidige += 1
 
 def sortFunc(dictionary):
     return "{:10d}".format(dictionary["size"]) + dictionary["name"].upper()  # RETURN de naam van de gegeven dictionery
@@ -120,6 +130,7 @@ def getExif_data(path, data_type):
     
     except OSError as e:
         print(f"error in getExif_data(): {e}\nwith file: {path}")
+        log_errors(f"getExif_data(): {e}\nwith file: {path}")
 
 def find_date(entry):
     result = {}
@@ -183,7 +194,11 @@ def scanFolders(startFolder, callback=None): #
                 if callback:
                     callback(dirs_scanned)
 
-                scanFolders(os.path.join(startFolder, entry.name), callback=callback) #zoek dan dieper
+                if not(entry.name.startswith("$")):
+                    scanFolders(os.path.join(startFolder, entry.name), callback=callback) #zoek dan dieper
+                else:
+                    print("Cannot scan system folder: "+ entry.name)
+                    log_errors(f"scanFolders(): cannot scan system folder {entry.name}")
                 
 
             elif entry.is_file(): # als de entry een file is
@@ -192,10 +207,14 @@ def scanFolders(startFolder, callback=None): #
                     bestandData = { "name": entry.name, "path": entry.path, "size": entry.stat().st_size, "created": find_date(entry)} # bestandData = een dict met naam,pat,size,dateCreated er in
                     imageList.append(bestandData) # voeg die dict toe aan de imageList nu is de imagelist een lijst met info over de fotos
 
+        # print("doe add_sortedFolderPath()")
         add_sortedFolderPath()
         list.close()
 
     except PermissionError:
         print("permision error")
+        log_errors(f"scanFolders(): permission error")
+
         pass
 
+clear_log()

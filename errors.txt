@@ -1,4 +1,2 @@
-- test0
-
-- test1
+- scanFolders(): cannot scan system folder $RECYCLE.BIN
 
