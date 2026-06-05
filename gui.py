@@ -131,6 +131,11 @@ def sort_photos(event=None):
             messagebox.showerror(title="unknown error", message=f"error: \n{e}")
             update_sorting_label(False)
 
+    print()
+    if imagescan.check_log():
+        messagebox.showinfo(title="errors", message=f"{imagescan.error_amount} errors acured\nmore info in errors.txt")
+
+
 def settingsWindow():
     global settings_window
 

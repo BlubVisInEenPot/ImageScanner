@@ -12,6 +12,7 @@ functions:
 
 bugs:
 - maanden mappen en jaaren mappen worden niet op de juiste volgworden aangemaakt dus staan niet netjes in file explorer vooral maanden
+- volgens mij skipt die photos als die 2 dezelfte naam in een mapje heeft en delete byte dubbels setting werkt mischien alleen als je het aan het begin uitzet
 
 gui:
 - add spinning thing
