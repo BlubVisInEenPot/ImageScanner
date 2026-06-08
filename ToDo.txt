@@ -17,11 +17,9 @@ bugs:
 gui:
 - add spinning thing
 - melt het aantal gevonden fotos, deleted fotos, gesorteerde fotos
-- melt het aantal errors in een pop up als er errors zijn (met meer info in log file)
 
 overige:
 - log file for errors inplaats van printen
-- verander de datum file explorer (windows) finder etc (unix) uses to sort pictures by date to correct one
 - fix probleem waar je een incorecte datum kan hebben zoals 01.01.1970 
 
 .

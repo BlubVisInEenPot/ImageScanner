@@ -40,18 +40,16 @@ def makedir(i): # make the directories
     except FileExistsError:
         pass
     except PermissionError:
-        log_errors(f"makedir(): prmision denied")
+        log_errors(f"makedir(): permision denied")
 
     except Exception as e:
         log_errors(f"makedir(): {e}")
-
 
 def add_sortedFolderPath(): # add the sorted folder locations to the dictionarys
     global imageList , sortDir
     for file in range(0, len(imageList)):
         date = imageList[file]["created"]
-        imageList[file]["destFolder"] = os.path.join(date.strftime('%Y'), date.strftime('%B'))
-
+        imageList[file]["destFolder"] = os.path.join(date.strftime('%Y'), date.strftime('%m %B'))
 
 def copieTo_folders(dest, callback=None): # copie all photos to the sorted folder locations
     global imageList, running
