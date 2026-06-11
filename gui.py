@@ -10,10 +10,12 @@ root = Tk()
 root.geometry("600x300")
 root.minsize(550, 200)
 root.title("image sorter")
-root.iconbitmap("icon.ico")
+
+icon = PhotoImage(file="icon.png")
+root.iconphoto(False, icon)
 
 
-searchDirectory = r"C:\Users\morten.goudswaard\Downloads"
+# searchDirectory = r"C:\Users\morten.goudswaard\Downloads"
 
 deleteDubbels_setting = BooleanVar()
 deleteDubbels_setting.set(True)
@@ -135,7 +137,6 @@ def sort_photos(event=None):
     if imagescan.check_log():
         messagebox.showinfo(title="errors", message=f"{imagescan.error_amount} errors acured\nmore info in errors.txt")
 
-
 def settingsWindow():
     global settings_window
 
@@ -145,7 +146,10 @@ def settingsWindow():
         settings_window = Toplevel()
         settings_window.title("settings")
         settings_window.geometry("200x300")
-        settings_window.iconbitmap("icon2.ico")
+        # icon
+        icon2 = PhotoImage(file="icon2.png")
+        settings_window.iconphoto(False, icon2)
+        # wigets
         checkbox = ttk.Checkbutton(settings_window, text="delete dubbels\n  (byte for byte match)  ", variable=deleteDubbels_setting)
         checkbox.grid(row=0, column=0, sticky="ew")
         checkbox2 = ttk.Checkbutton(settings_window, text ="try opening corupt files\n(may result in errors)", command=on_setting_change, variable=coruptFiles_setting)
@@ -156,7 +160,6 @@ def on_setting_change():
     print(imagescan.ImageFile.LOAD_TRUNCATED_IMAGES)
 
 t1 = None
-
 def run(function):
     global t1
     if check_t1():
