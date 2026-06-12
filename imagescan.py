@@ -51,13 +51,27 @@ def add_sortedFolderPath(): # add the sorted folder locations to the dictionarys
         date = imageList[file]["created"]
         imageList[file]["destFolder"] = os.path.join(date.strftime('%Y'), date.strftime('%m %B'))
 
+def doesFile_Exist(sourceFile, targetDir):
+    filename = os.path.basename(sourceFile)
+    target_path = os.path.join(targetDir, filename)
+    if os.path.exists(target_path):
+        return True
+    else:
+        return False
+
+nameCopie_counter = 0
 def copieTo_folders(dest, callback=None): # copie all photos to the sorted folder locations
-    global imageList, running
+    global imageList, running, nameCopie_counter
 
     for dict in imageList:
         destination = os.path.join(dest, dict["destFolder"])
         makedir(destination)
-        shutil.copy2(dict["path"], destination)
+        if not doesFile_Exist(dict["path"], str(destination)):
+            shutil.copy2(dict["path"], destination)
+        else:
+            newFileName = f"{os.path.basename(dict["path"])} {nameCopie_counter}"
+            shutil.copy2(dict["path"], os.path.join(destination, newFileName))
+            nameCopie_counter += 1
 
     
     if callback:
