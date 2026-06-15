@@ -11,14 +11,16 @@ functions:
 - vedeo suport
 
 bugs:
-- volgens mij skipt die photos als die 2 dezelfte naam in een mapje heeft en delete byte dubbels setting werkt mischien alleen als je het aan het begin uitzet
+- delete byte dubbels wort alleen toegepast als je eerst nog een keer scant
 
 gui:
+- add settings logo png to button
 - add spinning thing
 - melt het aantal gevonden fotos, deleted fotos, gesorteerde fotos
 
 overige:
 - log file for errors inplaats van printen
-- fix probleem waar je een incorecte datum kan hebben zoals 01.01.1970 
+- fix probleem waar je een incorecte datum kan hebben zoals 01.01.1970
+- tree.pack() -> use tree.pack_forget() -> tree.pack() voor het hiden van tree view ald die aan het inserten is
 
 .

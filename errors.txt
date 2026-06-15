@@ -1,2 +1,4 @@
 - scanFolders(): cannot scan system folder $RECYCLE.BIN
 
+- scanFolders(): cannot scan system folder $RECYCLE.BIN
+
