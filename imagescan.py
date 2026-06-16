@@ -108,21 +108,6 @@ def delete_byteDubbels():
         except  Exception as e:
             log_errors(f"delete_byteDubbels(): {e}")
 
-# def delete_dubbels():
-#     global imageList
-#
-#     if len(imageList) > 0: # als de lengte van imageList groter is dan 0
-#         vorige = imageList[0] # maak een variable aan vorige = het eerste ding in imageList
-#     else:
-#         print("empty list") # print anders empty list
-#     huidige = 1 # maak een variable aan huidig is 1
-#     while huidige < len(imageList): # als huidig(1) klijner is dan de lengte van imagelist loop
-#         if imageList[huidige]["name"] == vorige["name"] and imageList[huidige]["size"] == vorige["size"]: # als de naam van de huidige gelijk is als de naam van de vorige en de size
-#             imageList.pop(huidige) #
-#         else:
-#             vorige = imageList[huidige]
-#             huidige += 1
-
 def sortFunc(dictionary):
     return "{:10d}".format(dictionary["size"]) + dictionary["name"].upper()  # RETURN de naam van de gegeven dictionery
 #  ^ soorteert de doorgegeven dictionary eerst op naam en dan op maat

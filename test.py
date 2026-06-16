@@ -1,12 +1,29 @@
-import os
+from tkinter import *
+from tkinter import ttk
 
-def doesFile_Exist(sourceFile, targetDir):
-    filename = os.path.basename(sourceFile)
-    target_path = os.path.join(targetDir, filename)
-    if os.path.exists(target_path):
-        return True
-    else:
-        return False
+root = Tk()
+root.geometry("300x200")
 
+w = ttk.Label(root, text='test', font="50")
+w.pack()
 
-print(doesFile_Exist("Y:\Digibende\Amstelveen\Kandidaten\Programmeren\morten\images.tiff", "Y:\Digibende\Amstelveen\Kandidaten\Programmeren\morten"))
+menubutton = ttk.Menubutton(root, text="Menu")
+
+menubutton.menu = Menu(menubutton)
+menubutton["menu"] = menubutton.menu
+
+var1 = IntVar(value=1)
+var2 = IntVar(value=1)
+var3 = IntVar(value=0)
+
+menubutton.menu.add_checkbutton(label="Courses",
+                                variable=var1)
+menubutton.menu.add_checkbutton(label="Students",
+                                variable=var2)
+menubutton.menu.add_checkbutton(label="Careers",
+                                variable=var3)
+
+print(var1)
+
+menubutton.pack()
+root.mainloop()

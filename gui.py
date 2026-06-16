@@ -12,6 +12,7 @@ root.minsize(550, 200)
 root.title("image sorter")
 
 icon = PhotoImage(file="icon.png")
+icon2 = PhotoImage(file="icon2.png")
 root.iconphoto(False, icon)
 
 
@@ -138,7 +139,7 @@ def sort_photos(event=None):
         messagebox.showinfo(title="errors", message=f"{imagescan.error_amount} errors acured\nmore info in errors.txt")
 
 def settingsWindow():
-    global settings_window
+    global settings_window, icon2
 
     if settings_window is not None and settings_window.winfo_exists():
         pass
@@ -146,14 +147,29 @@ def settingsWindow():
         settings_window = Toplevel()
         settings_window.title("settings")
         settings_window.geometry("200x300")
-        # icon
-        icon2 = PhotoImage(file="icon2.png")
         settings_window.iconphoto(False, icon2)
         # wigets
+        # checkboxes
         checkbox = ttk.Checkbutton(settings_window, text="delete dubbels\n  (byte for byte match)  ", variable=deleteDubbels_setting)
         checkbox.grid(row=0, column=0, sticky="ew")
         checkbox2 = ttk.Checkbutton(settings_window, text ="try opening corupt files\n(may result in errors)", command=on_setting_change, variable=coruptFiles_setting)
         checkbox2.grid(row=1, column=0, sticky="ew")
+        # menu button with checkboxes for file types
+        menubutton = ttk.Menubutton(settings_window, text="filetypes")
+        #craate menu attached to menu button
+        menubutton.menu = Menu(menubutton, tearoff=0)
+        menubutton["menu"] = menubutton.menu
+        #create variables
+        extLabels = ["jpg", "png", "jpeg", "tiff", "raw", "dng", "gif", "heic", "heif", "hif", "heics", "heifs", "avci"]
+        vars_dict = {ext: IntVar(value=1) for ext in extLabels}
+
+        menubutton.vars_dict = vars_dict
+
+        #add checkbuttons to the menu
+        for ext, var_obj in vars_dict.items():
+            menubutton.menu.add_checkbutton(label=ext, variable=var_obj)
+        #put in grid
+        menubutton.grid(row=2, column=0)
 
 def on_setting_change():
     imagescan.ImageFile.LOAD_TRUNCATED_IMAGES = coruptFiles_setting.get()
@@ -177,7 +193,7 @@ def check_t1():
         return True
 
 
-
+buttonIcon = icon2.subsample(2, 2)
 
 root.columnconfigure(0, weight=1)
 root.rowconfigure(0, weight=0)
@@ -189,7 +205,7 @@ root.rowconfigure(3, weight=0)
 frame_top = ttk.Frame(root)
 frame_top.grid(row=0, column=0, sticky="ew")
 
-button_settings = ttk.Button(frame_top, text="⚙️", command=settingsWindow)
+button_settings = ttk.Button(frame_top, image = buttonIcon, command=settingsWindow)
 button_settings.pack(side=RIGHT, fill=BOTH, expand=False)
 
 #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
