@@ -45,11 +45,15 @@ def makedir(i): # make the directories
     except Exception as e:
         log_errors(f"makedir(): {e}")
 
-def add_sortedFolderPath(): # add the sorted folder locations to the dictionarys
+def add_sortedFolderPath(setting): # add the sorted folder locations to the dictionarys
     global imageList , sortDir
     for file in range(0, len(imageList)):
         date = imageList[file]["created"]
-        imageList[file]["destFolder"] = os.path.join(date.strftime('%Y'), date.strftime('%m %B'))
+
+        if setting:
+            imageList[file]["destFolder"] = os.path.join(date.strftime('%Y'), date.strftime('%m %B'))
+        else:
+            imageList[file]["destFolder"] = date.strftime('%Y')
 
 def doesFile_Exist(sourceFile, targetDir):
     filename = os.path.basename(sourceFile)
@@ -183,7 +187,7 @@ def find_date(entry):
     return min(result.values())
 
 dirs_scanned = 0
-def scanFolders(startFolder, extList, callback=None): #
+def scanFolders(startFolder, extList, sortMonth, callback=None): #
     global imageList, dirs_scanned
     bestandData = {} # maak lege dict aan
 
@@ -201,7 +205,7 @@ def scanFolders(startFolder, extList, callback=None): #
                     callback(dirs_scanned)
 
                 if not(entry.name.startswith("$")):
-                    scanFolders(os.path.join(startFolder, entry.name), extList, callback=callback) #zoek dan dieper
+                    scanFolders(os.path.join(startFolder, entry.name), extList, sortMonth, callback=callback) #zoek dan dieper
                 else:
                     log_errors(f"scanFolders(): cannot scan system folder {entry.name}")
                 
@@ -212,7 +216,7 @@ def scanFolders(startFolder, extList, callback=None): #
                     bestandData = { "name": entry.name, "path": entry.path, "size": entry.stat().st_size, "created": find_date(entry)} # bestandData = een dict met naam,pat,size,dateCreated er in
                     imageList.append(bestandData) # voeg die dict toe aan de imageList nu is de imagelist een lijst met info over de fotos
 
-        add_sortedFolderPath()
+        add_sortedFolderPath(sortMonth)
         list.close()
 
     except PermissionError:

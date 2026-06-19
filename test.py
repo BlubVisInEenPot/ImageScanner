@@ -1,29 +1,32 @@
-from tkinter import *
-from tkinter import ttk
+import tkinter as tk
 
-root = Tk()
+# Define the callback function that runs when the button is clicked
+def on_click():
+    print("Button was clicked!")
+
+variable = True
+def able():
+    global variable
+    if variable:
+        button.config(state="disabled")
+        variable = False
+    else:
+        button.config(state="active")
+        variable = True
+
+# 1. Create the main application window
+root = tk.Tk()
+root.title("Tkinter Button Example")
 root.geometry("300x200")
 
-w = ttk.Label(root, text='test', font="50")
-w.pack()
+# 2. Create the button widget
+# Note: Pass the function name to 'command' WITHOUT parentheses
+button = tk.Button(root, text="Click Me", command=on_click)
+button.pack(pady=20)
+button2 = tk.Button(root, text="disable/enable", command=able)
+button2.pack(pady=20)
+# 3. Position the button inside the window
 
-menubutton = ttk.Menubutton(root, text="Menu")
 
-menubutton.menu = Menu(menubutton)
-menubutton["menu"] = menubutton.menu
-
-var1 = IntVar(value=1)
-var2 = IntVar(value=1)
-var3 = IntVar(value=0)
-
-menubutton.menu.add_checkbutton(label="Courses",
-                                variable=var1)
-menubutton.menu.add_checkbutton(label="Students",
-                                variable=var2)
-menubutton.menu.add_checkbutton(label="Careers",
-                                variable=var3)
-
-print(var1)
-
-menubutton.pack()
+# 4. Start the application event loop
 root.mainloop()

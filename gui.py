@@ -22,6 +22,9 @@ deleteDubbels_setting = BooleanVar()
 deleteDubbels_setting.set(True)
 coruptFiles_setting = BooleanVar()
 coruptFiles_setting.set(False)
+sortByMonth = BooleanVar()
+sortByMonth.set(True)
+
 settings_window = None
 
 def openfilename():
@@ -96,14 +99,14 @@ def search_photos(event=None):
     for var in vars_dict:
         if vars_dict[var].get():
             extList.append(var)
-    print(extList)
+    print(f"sortByMonth setting: {sortByMonth.get()}")
 
     if searchDirectory == "":
         messagebox.showinfo(title="no path", message="no path to search")
     else:
 
         try:
-            imagescan.scanFolders(searchDirectory,  extList, callback=update_folder_label)  # roep functie aan
+            imagescan.scanFolders(searchDirectory,  extList, sortByMonth.get(), callback=update_folder_label)  # roep functie aan
             imagescan.imageList.sort(key=imagescan.sortFunc)
         except FileNotFoundError:
             messagebox.showinfo(title="file not found error", message=f"could not find directory: \n{searchDirectory}")
@@ -163,6 +166,8 @@ def settingsWindow():
         checkbox.grid(row=0, column=0, sticky="ew")
         checkbox2 = ttk.Checkbutton(settings_window, text ="try opening corupt files\n(may result in errors)", command=on_setting_change, variable=coruptFiles_setting)
         checkbox2.grid(row=1, column=0, sticky="ew")
+        checkbox3 = ttk.Checkbutton(settings_window, text="also sort by month",variable=sortByMonth)
+        checkbox3.grid(row=2, column=0, sticky="ew")
         # menu button with checkboxes for file types
         menubutton = ttk.Menubutton(settings_window, text="filetypes")
         #craate menu attached to menu button
@@ -173,7 +178,7 @@ def settingsWindow():
         for ext, var_obj in vars_dict.items():
             menubutton.menu.add_checkbutton(label=ext, variable=var_obj)
         #put in grid
-        menubutton.grid(row=2, column=0)
+        menubutton.grid(row=3, column=0, sticky="w")
 
 def on_setting_change():
     imagescan.ImageFile.LOAD_TRUNCATED_IMAGES = coruptFiles_setting.get()

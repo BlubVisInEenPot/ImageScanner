@@ -3,18 +3,17 @@ TO DO:
 settings:
 - optie om sorting uit te zetten voor bepaalde cameras
 - optie om bepaalde folders te excluden 
-- optie om bepaalde jaaren of te negeren of in een apart mapje te doen 
-- optie om te sorteeren op alleen jaar of jaar en maant 
+- optie om bepaalde jaaren of te negeren of in een apart mapje te doen
 
 functions:
 - vedeo suport
 
 bugs:
-- delete byte dubbels wort alleen toegepast als je eerst nog een keer scant
 
 gui:
 - add spinning thing
 - melt het aantal gevonden fotos, deleted fotos, gesorteerde fotos
+- lock sort button when not scanned yet or give worning that chaneged setting might not change
 
 overige:
 - fix probleem waar je een incorecte datum kan hebben zoals 01.01.1970
