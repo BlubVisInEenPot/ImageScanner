@@ -183,7 +183,7 @@ def find_date(entry):
     return min(result.values())
 
 dirs_scanned = 0
-def scanFolders(startFolder, callback=None): #
+def scanFolders(startFolder, extList, callback=None): #
     global imageList, dirs_scanned
     bestandData = {} # maak lege dict aan
 
@@ -201,13 +201,13 @@ def scanFolders(startFolder, callback=None): #
                     callback(dirs_scanned)
 
                 if not(entry.name.startswith("$")):
-                    scanFolders(os.path.join(startFolder, entry.name), callback=callback) #zoek dan dieper
+                    scanFolders(os.path.join(startFolder, entry.name), extList, callback=callback) #zoek dan dieper
                 else:
                     log_errors(f"scanFolders(): cannot scan system folder {entry.name}")
                 
 
             elif entry.is_file(): # als de entry een file is
-                if check_fileType(entry.path, "picture"):
+                if check_fileType(entry.path, extList):
 
                     bestandData = { "name": entry.name, "path": entry.path, "size": entry.stat().st_size, "created": find_date(entry)} # bestandData = een dict met naam,pat,size,dateCreated er in
                     imageList.append(bestandData) # voeg die dict toe aan de imageList nu is de imagelist een lijst met info over de fotos

@@ -91,13 +91,19 @@ def search_photos(event=None):
     update_sorting_label("clear")
     imagescan.dirs_scanned = 0
     update_folder_label(0)
+    #get all selected filetypes
+    extList = []
+    for var in vars_dict:
+        if vars_dict[var].get():
+            extList.append(var)
+    print(extList)
 
     if searchDirectory == "":
         messagebox.showinfo(title="no path", message="no path to search")
     else:
 
         try:
-            imagescan.scanFolders(searchDirectory, callback=update_folder_label)  # roep functie aan
+            imagescan.scanFolders(searchDirectory,  extList, callback=update_folder_label)  # roep functie aan
             imagescan.imageList.sort(key=imagescan.sortFunc)
         except FileNotFoundError:
             messagebox.showinfo(title="file not found error", message=f"could not find directory: \n{searchDirectory}")
@@ -138,8 +144,11 @@ def sort_photos(event=None):
     if imagescan.check_log():
         messagebox.showinfo(title="errors", message=f"{imagescan.error_amount} errors acured\nmore info in errors.txt")
 
+#create variables for menu buttons
+extLabels = ["jpg", "png", "jpeg", "tiff", "raw", "dng", "gif", "heic", "heif", "hif", "heics", "heifs", "avci"]
+vars_dict = {ext: IntVar(value=1) for ext in extLabels}
 def settingsWindow():
-    global settings_window, icon2
+    global settings_window, icon2, extLabels, vars_dict
 
     if settings_window is not None and settings_window.winfo_exists():
         pass
@@ -159,11 +168,6 @@ def settingsWindow():
         #craate menu attached to menu button
         menubutton.menu = Menu(menubutton, tearoff=0)
         menubutton["menu"] = menubutton.menu
-        #create variables
-        extLabels = ["jpg", "png", "jpeg", "tiff", "raw", "dng", "gif", "heic", "heif", "hif", "heics", "heifs", "avci"]
-        vars_dict = {ext: IntVar(value=1) for ext in extLabels}
-
-        menubutton.vars_dict = vars_dict
 
         #add checkbuttons to the menu
         for ext, var_obj in vars_dict.items():

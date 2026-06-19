@@ -2,7 +2,6 @@ TO DO:
 
 settings:
 - optie om sorting uit te zetten voor bepaalde cameras
-- optie om bepaalde filetypes uit te zetten - https://stackoverflow.com/questions/33781047/tkinter-drop-down-list-of-check-boxes-combo-boxes
 - optie om bepaalde folders te excluden 
 - optie om bepaalde jaaren of te negeren of in een apart mapje te doen 
 - optie om te sorteeren op alleen jaar of jaar en maant 
