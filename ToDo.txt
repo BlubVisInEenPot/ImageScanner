@@ -12,8 +12,7 @@ bugs:
 
 gui:
 - add spinning thing
-- melt het aantal gevonden fotos, deleted fotos, gesorteerde fotos
-- lock sort button when not scanned yet or give worning that chaneged setting might not change
+- melt het aantal gevonden fotos, deleted fotos, gesorteerde fotos   (ln 112-84)
 
 overige:
 - fix probleem waar je een incorecte datum kan hebben zoals 01.01.1970

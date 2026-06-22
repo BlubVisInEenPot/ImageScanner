@@ -81,17 +81,18 @@ def copieTo_folders(dest, callback=None): # copie all photos to the sorted folde
     if callback:
         callback(False)
 
+# deletedCounter = 0
 def delete_byteDubbels():
     global imageList
 
     buffersize = 1048576
     counter = 0
-
+    # chack if thare are images
     if not len(imageList) > 0:
         # print("no imeges in list (def delete_byteDubbels)")
         pass
     while counter + 1 < len(imageList):
-
+        # get filepath of current and previus image
         filePath1 = imageList[counter]["path"]
         filePath2 = imageList[counter + 1]["path"]
 
@@ -108,6 +109,7 @@ def delete_byteDubbels():
 
                         elif not bytes1:
                             imageList.pop(counter)
+                            # deletedCounter += 1
                             break
         except  Exception as e:
             log_errors(f"delete_byteDubbels(): {e}")

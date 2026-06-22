@@ -26,6 +26,20 @@ sortByMonth = BooleanVar()
 sortByMonth.set(True)
 
 settings_window = None
+disableSort = True
+
+
+def disable_button(button):
+    global disableSort
+
+    button.config(state="disabled")
+    disableSort = True
+
+def enable_button(button):
+    global disableSort
+
+    button.config(state="active")
+    disableSort = False
 
 def openfilename():
 
@@ -99,7 +113,6 @@ def search_photos(event=None):
     for var in vars_dict:
         if vars_dict[var].get():
             extList.append(var)
-    print(f"sortByMonth setting: {sortByMonth.get()}")
 
     if searchDirectory == "":
         messagebox.showinfo(title="no path", message="no path to search")
@@ -108,6 +121,7 @@ def search_photos(event=None):
         try:
             imagescan.scanFolders(searchDirectory,  extList, sortByMonth.get(), callback=update_folder_label)  # roep functie aan
             imagescan.imageList.sort(key=imagescan.sortFunc)
+            enable_button(button_4) # enable sort button after dir has been searched
         except FileNotFoundError:
             messagebox.showinfo(title="file not found error", message=f"could not find directory: \n{searchDirectory}")
 
@@ -122,6 +136,7 @@ def search_photos(event=None):
         display_photoNames(imagescan.imageList)
 
     update_folder_label("done")
+
 
 def sort_photos(event=None):
     dest = entry2.get()
@@ -162,34 +177,33 @@ def settingsWindow():
         settings_window.iconphoto(False, icon2)
         # wigets
         # checkboxes
-        checkbox = ttk.Checkbutton(settings_window, text="delete dubbels\n  (byte for byte match)  ", variable=deleteDubbels_setting)
+        checkbox = ttk.Checkbutton(settings_window, text="delete dubbels\n  (byte for byte match)  ", command=lambda: disable_button(button_4), variable=deleteDubbels_setting)
         checkbox.grid(row=0, column=0, sticky="ew")
         checkbox2 = ttk.Checkbutton(settings_window, text ="try opening corupt files\n(may result in errors)", command=on_setting_change, variable=coruptFiles_setting)
         checkbox2.grid(row=1, column=0, sticky="ew")
-        checkbox3 = ttk.Checkbutton(settings_window, text="also sort by month",variable=sortByMonth)
+        checkbox3 = ttk.Checkbutton(settings_window, text="also sort by month", command=lambda: disable_button(button_4), variable=sortByMonth)
         checkbox3.grid(row=2, column=0, sticky="ew")
         # menu button with checkboxes for file types
-        menubutton = ttk.Menubutton(settings_window, text="filetypes")
+        menubutton = ttk.Menubutton(settings_window, text="filetypes")# command=lambda: disable_button(button_4)
         #craate menu attached to menu button
         menubutton.menu = Menu(menubutton, tearoff=0)
         menubutton["menu"] = menubutton.menu
 
         #add checkbuttons to the menu
         for ext, var_obj in vars_dict.items():
-            menubutton.menu.add_checkbutton(label=ext, variable=var_obj)
+            menubutton.menu.add_checkbutton(label=ext, command=lambda: disable_button(button_4), variable=var_obj)
         #put in grid
         menubutton.grid(row=3, column=0, sticky="w")
 
 def on_setting_change():
-    imagescan.ImageFile.LOAD_TRUNCATED_IMAGES = coruptFiles_setting.get()
-    print(imagescan.ImageFile.LOAD_TRUNCATED_IMAGES)
+    imagescan.ImageFile.LOAD_TRUNCATED_IMAGES = coruptFiles_setting.get() # change actual setting
+    disable_button(button_4) # disable sort button after setting change
 
 t1 = None
 def run(function):
     global t1
     if check_t1():
         pass
-        print("pass")
     else:
         t1 = Thread(target=function, daemon=True)
         t1.start()
@@ -272,6 +286,7 @@ button_3.grid(row=0, column=0, sticky="w")
 
 button_4 = ttk.Button(frame_bottom, text="sort photos", command=lambda: run(sort_photos))
 button_4.grid(row=0, column=3, sticky="e")
+disable_button(button_4) # disable sort button at the begining
 
 label = ttk.Label(frame_bottom, text="scanned folders: 0")
 label.grid(row=0, column=1)
