@@ -137,7 +137,6 @@ def search_photos(event=None):
 
     update_folder_label("done")
 
-
 def sort_photos(event=None):
     dest = entry2.get()
 
@@ -158,7 +157,7 @@ def sort_photos(event=None):
             messagebox.showerror(title="unknown error", message=f"error: \n{e}")
             update_sorting_label(False)
 
-    print()
+    label_3.config(text=f"deleted {imagescan.deletedCounter} dubbel pictures")
     if imagescan.check_log():
         messagebox.showinfo(title="errors", message=f"{imagescan.error_amount} errors acured\nmore info in errors.txt")
 
@@ -230,6 +229,9 @@ frame_top.grid(row=0, column=0, sticky="ew")
 
 button_settings = ttk.Button(frame_top, image = buttonIcon, command=settingsWindow)
 button_settings.pack(side=RIGHT, fill=BOTH, expand=False)
+
+label_3 = ttk.Label(frame_top, text="                         ")
+label_3.pack(side=LEFT, fill=BOTH, expand=False, padx=40)
 
 #- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 frame_middle_top = ttk.Frame(root)
