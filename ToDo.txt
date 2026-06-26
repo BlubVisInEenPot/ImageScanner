@@ -19,7 +19,7 @@ gui:
 - melt het aantal gevonden fotos, deleted fotos, gesorteerde fotos   (ln 112-84)
 
 overige:
-- fix probleem waar je een incorecte datum kan hebben zoals 01.01.1970
+- fix probleem waar je een incorecte datum kan hebben zoals 01.01.1970 00:00 door die datum te negeren 
 - nu een aparte functie om de sortedfolderpath er in te zetten mischien kan dat ook gewoon er voor in gezet worden na ale andere data
 
 
