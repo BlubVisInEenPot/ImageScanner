@@ -6,7 +6,12 @@ settings:
 - optie om bepaalde jaaren of te negeren of in een apart mapje te doen
 
 functions:
-- vedeo suport
+- vedeo suport{     # was gebleven bij ln 194 moet nog aantal lijsten aanpassen kijken of elleen werkt voor mp4 of ook voor andere + nog wat dingen
+1 pas extension list aan(in gui.py en in de functie)
+2 pas find date functie aan om ook vedeo exif/other data te kunnen vinden
+3 eventueel een aantal bytes of alle bytes vergelijken met een optie om het uit te zetten
+}
+
 
 bugs:
 
@@ -15,6 +20,8 @@ gui:
 
 overige:
 - fix probleem waar je een incorecte datum kan hebben zoals 01.01.1970
+- nu een aparte functie om de sortedfolderpath er in te zetten mischien kan dat ook gewoon er voor in gezet worden na ale andere data
+
 
 
 .

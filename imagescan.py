@@ -143,6 +143,17 @@ def getExif_data(path, data_type):
     except OSError as e:
         log_errors(f"getExif_data(): {e}\nwith file: {path}")
 
+def getExif_data_video(path, data_type):
+    try:
+        media_info = MediaInfo.parse(path).to_data()
+        creation_date = media_info['tracks'][0].get(data_type)
+
+        cleanDate = creation_date.replace("UTC", "").strip()
+        return cleanDate
+
+    except OSError as e:
+        log_errors(f"getExif_data(): {e}\nwith file: {path}")
+
 def find_date(entry):
     result = {}
     result_exif = {}
@@ -177,6 +188,10 @@ def find_date(entry):
 
         if getExif_data(entry.path, "DateTimeDigitized") != None: #and getExif_data(entry.path, "DateTimeDigitized") != "0000:00:00 00:00:00":
             result_exif["DateTimeDigitized"] = getExif_data(entry.path, "DateTimeDigitized")
+
+    elif check_fileType(entry.path, ["mp4", "m4v", "mov", "mkv", "avi", "wmv", "flv", "f4v"]):
+        if getExif_data_video(entry.path, "encoded_date") != None:
+            result_exif["encoded_date"] = getExif_data_video(entry.path, "encoded_date")
 
     try:
         for methods in result_exif:
