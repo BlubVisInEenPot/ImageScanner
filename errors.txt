@@ -1,0 +1,8 @@
+- scanFolders(): cannot scan system folder $Recycle.Bin
+
+- scanFolders(): cannot scan system folder $WinREAgent
+
+- scanFolders(): permission error
+
+- scanFolders(): permission error
+
