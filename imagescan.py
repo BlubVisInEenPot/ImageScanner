@@ -4,6 +4,7 @@ import tkinter as tk
 from PIL import ImageTk, Image, ImageFile
 from PIL.ExifTags import TAGS
 from pillow_heif import register_heif_opener
+from pymediainfo import MediaInfo
 from  datetime import *
 import filetype
 
@@ -140,7 +141,7 @@ def getExif_data(path, data_type):
         exif = { TAGS.get(tag_id, tag_id): value for tag_id, value in exifdata.items() }
         return(exif.get(data_type))
     
-    except OSError as e:
+    except Exception as e:
         log_errors(f"getExif_data(): {e}\nwith file: {path}")
 
 def getExif_data_video(path, data_type):
@@ -148,10 +149,10 @@ def getExif_data_video(path, data_type):
         media_info = MediaInfo.parse(path).to_data()
         creation_date = media_info['tracks'][0].get(data_type)
 
-        cleanDate = creation_date.replace("UTC", "").strip()
+        cleanDate = creation_date.replace("UTC", "").replace("-", ":").strip()
         return cleanDate
 
-    except OSError as e:
+    except Exception as e:
         log_errors(f"getExif_data(): {e}\nwith file: {path}")
 
 def find_date(entry):
@@ -180,17 +181,21 @@ def find_date(entry):
 
 
     if check_fileType(entry.path, ["jpg", "tiff", "jpeg", "heic", "heif", "hif", "heics", "heifs", "avci"]):#["jpg", "tiff", "jpeg", "heic", "heif", "hif", "heics", "heifs", "avci"]
-        if getExif_data(entry.path, "DateTime") != None: #and getExif_data(entry.path, "DateTime") != "0000:00:00 00:00:00":
+        Datetime_date = getExif_data(entry.path, "DateTime")
+        if Datetime_date and Datetime_date != "0000:00:00 00:00:00" and Datetime_date != "1970:01:01 00:00:00":
             result_exif["Datetime"] = getExif_data(entry.path, "DateTime")
 
-        if getExif_data(entry.path, "DateTimeOriginal") != None: #and getExif_data(entry.path, "DateTimeOriginal") != "0000:00:00 00:00:00":
+        DateTimeOriginal_date = getExif_data(entry.path, "DateTimeOriginal")
+        if DateTimeOriginal_date and DateTimeOriginal_date != "0000:00:00 00:00:00" and DateTimeOriginal_date != "1970:01:01 00:00:00":
             result_exif["DateTimeOriginal"] = getExif_data(entry.path, "DateTimeOriginal")
 
-        if getExif_data(entry.path, "DateTimeDigitized") != None: #and getExif_data(entry.path, "DateTimeDigitized") != "0000:00:00 00:00:00":
+        DateTimeDigitized_date = getExif_data(entry.path, "DateTimeDigitized")
+        if DateTimeDigitized_date and DateTimeDigitized_date != "0000:00:00 00:00:00" and DateTimeDigitized_date != "1970:01:01 00:00:00":
             result_exif["DateTimeDigitized"] = getExif_data(entry.path, "DateTimeDigitized")
 
     elif check_fileType(entry.path, ["mp4", "m4v", "mov", "mkv", "avi", "wmv", "flv", "f4v"]):
-        if getExif_data_video(entry.path, "encoded_date") != None:
+        encodedDate = getExif_data_video(entry.path, "encoded_date")
+        if encodedDate and encodedDate != "0000:00:00 00:00:00" and encodedDate != "1970:01:01 00:00:00":
             result_exif["encoded_date"] = getExif_data_video(entry.path, "encoded_date")
 
     try:
