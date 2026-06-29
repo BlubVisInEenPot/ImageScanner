@@ -119,7 +119,8 @@ def sortFunc(dictionary):
 #  ^ soorteert de doorgegeven dictionary eerst op naam en dan op maat
 def check_fileType(path, extension):
     if extension == "picture":
-        imageExt = ["jpg", "png", "jpeg", "tiff", "raw", "dng", "gif", "heic", "heif", "hif", "heics", "heifs", "avci"]
+        imageExt = ["jpg", "png", "jpeg", "tiff", "raw", "dng", "gif", "heic", "heif", "hif", "heics", "heifs", "avci"
+                    , "mp4", "m4v", "mov", "mkv", "avi", "wmv", "flv", "f4v"]
     else:
         imageExt = extension
 
@@ -148,10 +149,10 @@ def getExif_data_video(path, data_type):
     try:
         media_info = MediaInfo.parse(path).to_data()
         creation_date = media_info['tracks'][0].get(data_type)
-
-        cleanDate = creation_date.replace("UTC", "").replace("-", ":").strip()
-        return cleanDate
-
+        if creation_date != None:
+            cleanDate = creation_date.replace("UTC", "").replace("-", ":").strip()
+            return cleanDate
+        return None
     except Exception as e:
         log_errors(f"getExif_data(): {e}\nwith file: {path}")
 

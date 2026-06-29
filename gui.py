@@ -162,7 +162,8 @@ def sort_photos(event=None):
         messagebox.showinfo(title="errors", message=f"{imagescan.error_amount} errors acured\nmore info in errors.txt")
 
 #create variables for menu buttons
-extLabels = ["jpg", "png", "jpeg", "tiff", "raw", "dng", "gif", "heic", "heif", "hif", "heics", "heifs", "avci"]
+extLabels = ["jpg", "png", "jpeg", "tiff", "raw", "dng", "gif", "heic", "heif", "hif", "heics", "heifs", "avci"
+             , "mp4", "m4v", "mov", "mkv", "avi", "wmv", "flv", "f4v"]
 vars_dict = {ext: IntVar(value=1) for ext in extLabels}
 def settingsWindow():
     global settings_window, icon2, extLabels, vars_dict
@@ -241,7 +242,7 @@ entry = ttk.Entry(frame_middle_top)
 entry.pack(side=LEFT, fill=BOTH, expand=True)
 entry.bind("<Return>", search_photos)
 
-button_1 = ttk.Button(frame_middle_top, text="select source", command=open_searchDir)
+button_1 = ttk.Button(frame_middle_top, text="select source", command=lambda: [open_searchDir(), disable_button(button_4)])
 button_1.pack(side=LEFT, expand=False)
 
 entry2 = ttk.Entry(frame_middle_top)

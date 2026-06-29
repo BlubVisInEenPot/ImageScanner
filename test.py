@@ -19,7 +19,7 @@
 
 # print(getExif_data(r"C:\Users\mort\Pictures\IMG_1522.HEIC", "DateTime"))
 
-string = "UTC YYYY-MM-DD HH:MM:SS"
+string = "UTC YYYY:MM:DD HH:MM:SS"
 
 print(string.replace("UTC", "").replace("-", ":").strip())
 
