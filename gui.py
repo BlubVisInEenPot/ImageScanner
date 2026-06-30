@@ -110,8 +110,9 @@ def search_photos(event=None):
     update_folder_label(0)
     #get all selected filetypes
     extList = []
-    for var in vars_dict:
-        if vars_dict[var].get():
+    mergedDict  = vars_dict | vars_dict2
+    for var in mergedDict:
+        if mergedDict[var].get():
             extList.append(var)
 
     if searchDirectory == "":
@@ -162,11 +163,14 @@ def sort_photos(event=None):
         messagebox.showinfo(title="errors", message=f"{imagescan.error_amount} errors acured\nmore info in errors.txt")
 
 #create variables for menu buttons
-extLabels = ["jpg", "png", "jpeg", "tiff", "raw", "dng", "gif", "heic", "heif", "hif", "heics", "heifs", "avci"
-             , "mp4", "m4v", "mov", "mkv", "avi", "wmv", "flv", "f4v"]
-vars_dict = {ext: IntVar(value=1) for ext in extLabels}
+picExtLabels = ["jpg", "png", "jpeg", "tiff", "raw", "dng", "gif", "heic", "heif", "hif", "heics", "heifs", "avci"]
+vars_dict = {ext: IntVar(value=1) for ext in picExtLabels}
+
+vidExtLabels = ["mp4", "m4v", "mov", "mkv", "avi", "wmv", "flv", "f4v"]
+vars_dict2 = {ext: IntVar(value=1) for ext in vidExtLabels}
+
 def settingsWindow():
-    global settings_window, icon2, extLabels, vars_dict
+    global settings_window, icon2, picExtLabels, vars_dict
 
     if settings_window is not None and settings_window.winfo_exists():
         pass
@@ -183,17 +187,22 @@ def settingsWindow():
         checkbox2.grid(row=1, column=0, sticky="ew")
         checkbox3 = ttk.Checkbutton(settings_window, text="also sort by month", command=lambda: disable_button(button_4), variable=sortByMonth)
         checkbox3.grid(row=2, column=0, sticky="ew")
-        # menu button with checkboxes for file types
-        menubutton = ttk.Menubutton(settings_window, text="filetypes")# command=lambda: disable_button(button_4)
-        #craate menu attached to menu button
+        # menu buttons with checkboxes for file types
+        menubutton = ttk.Menubutton(settings_window, text="pic_filetypes")
+        menubutton2 = ttk.Menubutton(settings_window, text="vid_filetypes")
+        #craate menu attached to menu buttons
         menubutton.menu = Menu(menubutton, tearoff=0)
         menubutton["menu"] = menubutton.menu
-
-        #add checkbuttons to the menu
+        menubutton2.menu = Menu(menubutton2, tearoff=0)
+        menubutton2["menu"] = menubutton2.menu
+        #add checkbuttons to the menu's
         for ext, var_obj in vars_dict.items():
             menubutton.menu.add_checkbutton(label=ext, command=lambda: disable_button(button_4), variable=var_obj)
+        for ext, var_obj in vars_dict2.items():
+            menubutton2.menu.add_checkbutton(label=ext, command=lambda: disable_button(button_4), variable=var_obj)
         #put in grid
         menubutton.grid(row=3, column=0, sticky="w")
+        menubutton2.grid(row=4, column=0, sticky="w")
 
 def on_setting_change():
     imagescan.ImageFile.LOAD_TRUNCATED_IMAGES = coruptFiles_setting.get() # change actual setting
